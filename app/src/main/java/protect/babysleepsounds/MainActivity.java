@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity
 
         _soundMap = ImmutableMap.<String, Integer>builder()
             .put(getResources().getString(R.string.dryer), R.raw.dryer)
-            .put(getResources().getString(R.string.heartbeatAndNoise), R.raw.noise_and_heartbeat)
             .put(getResources().getString(R.string.ocean), R.raw.ocean)
             .put(getResources().getString(R.string.rain), R.raw.rain)
             .put(getResources().getString(R.string.refrigerator), R.raw.refrigerator)

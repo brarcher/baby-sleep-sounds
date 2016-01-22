@@ -6,11 +6,14 @@ Play select sounds to help a baby sleep
 This application includes several audio files which when selected will
 play in a loop until stopped.
 
+If there is any interest in improving this project, kindly submit a pull request with proposed changed.
+
+# Thanks
+
 App icon made by Freepik from www.flaticon.com
 
 The following sound resources were created by [Canton Becker](http://whitenoise.cantonbecker.com)
 and are distributed under the CC BY-NC-SA 3.0 License:
- - noise_and_heartbeat.mp3
  - noise_only.mp3
 
 The following sound resources were created by [MC2Method.org](http://mc2method.org/white-noise/)
