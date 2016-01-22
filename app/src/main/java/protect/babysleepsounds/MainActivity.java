@@ -32,6 +32,17 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         _soundMap = ImmutableMap.<String, Integer>builder()
+            .put(getResources().getString(R.string.dryer), R.raw.dryer)
+            .put(getResources().getString(R.string.heartbeatAndNoise), R.raw.noise_and_heartbeat)
+            .put(getResources().getString(R.string.ocean), R.raw.ocean)
+            .put(getResources().getString(R.string.rain), R.raw.rain)
+            .put(getResources().getString(R.string.refrigerator), R.raw.refrigerator)
+            .put(getResources().getString(R.string.train), R.raw.train)
+            .put(getResources().getString(R.string.vacuum), R.raw.vacuum)
+            .put(getResources().getString(R.string.water), R.raw.water)
+            .put(getResources().getString(R.string.waterfall), R.raw.waterfall)
+            .put(getResources().getString(R.string.waves), R.raw.waves)
+            .put(getResources().getString(R.string.whiteNoise), R.raw.white_noise)
             .build();
 
         final Spinner soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
