@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Baby Sleep Sounds</string>
+    <string name="description">Select sound and click play</string>
+    <string name="sound">Sound</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+</resources>
