@@ -6,6 +6,8 @@ Play select sounds to help a baby sleep
 This application includes several audio files which when selected will
 play in a loop until stopped.
 
+If there is any interest in improving this project, kindly submit a pull request with proposed changed.
+
 # Thanks
 
 App icon made by Freepik from www.flaticon.com
