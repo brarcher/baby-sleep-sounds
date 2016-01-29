@@ -2,6 +2,7 @@
 Play select sounds to help a baby sleep
 
 [![Build Status](https://travis-ci.org/brarcher/baby-sleep-sounds.svg?branch=master)](https://travis-ci.org/brarcher/baby-sleep-sounds)
+[![Coverity Status](https://scan.coverity.com/projects/7764/badge.svg)](https://scan.coverity.com/projects/brarcher-baby-sleep-sounds)
 
 This application includes several audio files which when selected will
 play in a loop until stopped.
