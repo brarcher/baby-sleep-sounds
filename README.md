@@ -1,7 +1,10 @@
-# baby-sleep-sounds
+# Baby Sleep Sounds
 Play select sounds to help a baby sleep
 
 [![Build Status](https://travis-ci.org/brarcher/baby-sleep-sounds.svg?branch=master)](https://travis-ci.org/brarcher/baby-sleep-sounds)
+
+[![F-Droid](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Get_it_on_F-Droid.svg/160px-Get_it_on_F-Droid.svg.png)](https://f-droid.org/repository/browse/?fdid=protect.babysleepsounds "Baby Sleep Sounds on F-Droid")
+
 
 This application includes several audio files which when selected will
 play in a loop until stopped.
