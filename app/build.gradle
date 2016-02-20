@@ -1,4 +1,10 @@
 apply plugin: 'com.android.application'
+apply plugin: 'findbugs'
+
+findbugs {
+    sourceSets = []
+    ignoreFailures = false
+}
 
 android {
     compileSdkVersion 23
@@ -32,4 +38,23 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
+}
+
+task findbugs(type: FindBugs, dependsOn: assembleDebug) {
+
+    description 'Run findbugs'
+    group 'verification'
+
+    classes = fileTree('build/intermediates/classes/debug/')
+    source = fileTree('src/main/java')
+    classpath = files()
+
+    effort = 'max'
+
+    excludeFilter = file("./config/findbugs/exclude.xml")
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
 }
