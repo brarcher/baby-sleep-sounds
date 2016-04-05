@@ -86,8 +86,15 @@ public class MainActivity extends AppCompatActivity
         _mediaPlayer.setLooping(true);
         _mediaPlayer.start();
 
-        final Button button = (Button) findViewById(R.id.button);
-        button.setText(R.string.stop);
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final Button button = (Button) findViewById(R.id.button);
+                button.setText(R.string.stop);
+            }
+        });
     }
 
     private void stopPlayback()
@@ -96,8 +103,15 @@ public class MainActivity extends AppCompatActivity
         _mediaPlayer.release();
         _mediaPlayer = null;
 
-        final Button button = (Button) findViewById(R.id.button);
-        button.setText(R.string.play);
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final Button button = (Button) findViewById(R.id.button);
+                button.setText(R.string.play);
+            }
+        });
     }
 
     @Override
