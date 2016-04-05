@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity
     private Map<String, Integer> _soundMap;
     private Map<String, Integer> _timeMap;
 
-    MediaPlayer _mediaPlayer = null;
+    private MediaPlayer _mediaPlayer = null;
     private Timer _timer = null;
 
     @Override
