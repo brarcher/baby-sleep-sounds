@@ -63,27 +63,41 @@ public class MainActivity extends AppCompatActivity
             {
                 if(_mediaPlayer == null)
                 {
-                    String selectedSound = (String)soundSpinner.getSelectedItem();
-
-                    int id = _soundMap.get(selectedSound);
-
-                    _mediaPlayer = MediaPlayer.create(MainActivity.this, id);
-                    _mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-                    _mediaPlayer.setLooping(true);
-                    _mediaPlayer.start();
-
-                    button.setText(R.string.stop);
+                    startPlayback();
                 }
                 else
                 {
-                    _mediaPlayer.stop();
-                    _mediaPlayer.release();
-                    _mediaPlayer = null;
-
-                    button.setText(R.string.play);
+                    stopPlayback();
                 }
             }
         });
+    }
+
+    private void startPlayback()
+    {
+        final Spinner soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
+        String selectedSound = (String)soundSpinner.getSelectedItem();
+
+        int id = _soundMap.get(selectedSound);
+
+        _mediaPlayer = MediaPlayer.create(MainActivity.this, id);
+        _mediaPlayer.setWakeMode(getApplicationContext(),
+                PowerManager.PARTIAL_WAKE_LOCK);
+        _mediaPlayer.setLooping(true);
+        _mediaPlayer.start();
+
+        final Button button = (Button) findViewById(R.id.button);
+        button.setText(R.string.stop);
+    }
+
+    private void stopPlayback()
+    {
+        _mediaPlayer.stop();
+        _mediaPlayer.release();
+        _mediaPlayer = null;
+
+        final Button button = (Button) findViewById(R.id.button);
+        button.setText(R.string.play);
     }
 
     @Override
