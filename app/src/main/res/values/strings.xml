@@ -5,6 +5,17 @@
     <string name="play">Play</string>
     <string name="stop">Stop</string>
 
+    <string name="sleepTimer">Sleep Timer</string>
+    <string name="disabled">Disabled</string>
+    <string name="time_1minute">1 Minute</string>
+    <string name="time_5minute">5 Minutes</string>
+    <string name="time_10minute">10 Minutes</string>
+    <string name="time_30minute">30 Minutes</string>
+    <string name="time_1hour">1 Hour</string>
+    <string name="time_2hour">2 Hours</string>
+    <string name="time_4hour">4 Hours</string>
+    <string name="time_8hour">8 Hours</string>
+
     <string name="dryer">Dryer</string>
     <string name="ocean">Ocean</string>
     <string name="rain">Rain</string>
