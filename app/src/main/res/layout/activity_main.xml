@@ -65,6 +65,28 @@
                     android:drawSelectorOnTop="true" />
             </LinearLayout>
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:padding="5.0dip"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="16.0sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_vertical"
+                    android:paddingStart="20.0dip"
+                    android:paddingEnd="20.0dip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/sleepTimerSpinner"
+                    android:text="@string/sleepTimer" />
+                <Spinner
+                    android:id="@+id/sleepTimerSpinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawSelectorOnTop="true" />
+            </LinearLayout>
+
             <LinearLayout android:orientation="horizontal"
                           android:padding="5.0dip"
                           android:layout_width="fill_parent"

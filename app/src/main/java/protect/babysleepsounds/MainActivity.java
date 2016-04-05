@@ -16,12 +16,16 @@ import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity
 {
     private Map<String, Integer> _soundMap;
+    private Map<String, Integer> _timeMap;
 
     MediaPlayer _mediaPlayer = null;
+    private Timer _timer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,6 +48,18 @@ public class MainActivity extends AppCompatActivity
             .put(getResources().getString(R.string.whiteNoise), R.raw.white_noise)
             .build();
 
+        _timeMap = ImmutableMap.<String, Integer>builder()
+                .put(getResources().getString(R.string.disabled), 0)
+                .put(getResources().getString(R.string.time_1minute), 1000*60*1)
+                .put(getResources().getString(R.string.time_5minute), 1000*60*5)
+                .put(getResources().getString(R.string.time_10minute), 1000*60*10)
+                .put(getResources().getString(R.string.time_30minute), 1000*60*30)
+                .put(getResources().getString(R.string.time_1hour), 1000*60*60*1)
+                .put(getResources().getString(R.string.time_2hour), 1000*60*60*2)
+                .put(getResources().getString(R.string.time_4hour), 1000*60*60*4)
+                .put(getResources().getString(R.string.time_8hour), 1000*60*60*8)
+                .build();
+
         final Spinner soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
 
         List<String> names = new ArrayList<>(_soundMap.keySet());
@@ -52,6 +68,15 @@ public class MainActivity extends AppCompatActivity
                 android.R.layout.simple_spinner_item, names);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         soundSpinner.setAdapter(dataAdapter);
+
+
+        final Spinner sleepTimeoutSpinner = (Spinner) findViewById(R.id.sleepTimerSpinner);
+        List<String> times = new ArrayList<>(_timeMap.keySet());
+
+        ArrayAdapter<String> timesAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, times);
+        timesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sleepTimeoutSpinner.setAdapter(timesAdapter);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -86,6 +111,22 @@ public class MainActivity extends AppCompatActivity
         _mediaPlayer.setLooping(true);
         _mediaPlayer.start();
 
+        final Spinner sleepTimeoutSpinner = (Spinner) findViewById(R.id.sleepTimerSpinner);
+        String selectedTimeout = (String)sleepTimeoutSpinner.getSelectedItem();
+        int timeoutMs = _timeMap.get(selectedTimeout);
+        if(timeoutMs > 0)
+        {
+            _timer = new Timer();
+            _timer.schedule(new TimerTask()
+            {
+                @Override
+                public void run()
+                {
+                    stopPlayback();
+                }
+            }, (long)timeoutMs);
+        }
+
         runOnUiThread(new Runnable()
         {
             @Override
@@ -102,6 +143,13 @@ public class MainActivity extends AppCompatActivity
         _mediaPlayer.stop();
         _mediaPlayer.release();
         _mediaPlayer = null;
+
+        if(_timer != null)
+        {
+            _timer.cancel();
+            _timer.purge();
+            _timer = null;
+        }
 
         runOnUiThread(new Runnable()
         {
