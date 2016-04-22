@@ -11,6 +11,21 @@ play in a loop until stopped.
 
 If there is any interest in improving this project, kindly submit a pull request with proposed changed.
 
+# Building
+
+To build, use the gradle wrapper scripts provided in the top level directory of the project. The following will
+compile the application and run all unit tests:
+
+GNU/Linux, OSX, UNIX:
+```
+./gradlew build
+```
+
+Windows:
+```
+./gradlew.bat build
+```
+
 # Thanks
 
 App icon made by Freepik from www.flaticon.com
