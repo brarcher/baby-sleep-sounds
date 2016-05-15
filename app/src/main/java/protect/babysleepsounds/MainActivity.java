@@ -222,6 +222,19 @@ public class MainActivity extends AppCompatActivity
             Log.w(TAG, "Package name not found", e);
         }
 
+        final String[][] SOUND_RESOURCES = new String[][]
+        {
+            new String[] {"Canton Becker", "http://whitenoise.cantonbecker.com/"},
+            new String[] {"The MC2 Method", "http://mc2method.org/white-noise/"},
+        };
+
+        StringBuilder soundResources = new StringBuilder().append("<ul>");
+        for (String[] resource : SOUND_RESOURCES)
+        {
+            soundResources.append("<li><a href=\"").append(resource[1]).append("\">").append(resource[0]).append("</a></li>");
+        }
+        soundResources.append("</ul>");
+
         WebView wv = new WebView(this);
         String html =
             "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />" +
@@ -243,7 +256,9 @@ public class MainActivity extends AppCompatActivity
             "</p><hr/><p>" +
             String.format(getString(R.string.app_copyright_fmt), year) +
             "</p><hr/><p>" +
-            getString(R.string.app_license);
+            getString(R.string.app_license) +
+            "</p><hr/><p>" +
+            String.format(getString(R.string.sound_resources), appName, soundResources.toString());
 
         wv.loadDataWithBaseURL("file:///android_res/drawable/", html, "text/html", "utf-8", null);
         new AlertDialog.Builder(this)
