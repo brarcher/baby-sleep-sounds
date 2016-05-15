@@ -1,12 +1,20 @@
 package protect.babysleepsounds;
 
+import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -14,6 +22,7 @@ import android.widget.Spinner;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -21,6 +30,8 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity
 {
+    private final static String TAG = "BabySleepSounds";
+
     private Map<String, Integer> _soundMap;
     private Map<String, Integer> _timeMap;
 
@@ -172,5 +183,79 @@ public class MainActivity extends AppCompatActivity
         }
 
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+
+        if(id == R.id.action_about)
+        {
+            displayAboutDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void displayAboutDialog()
+    {
+        String appName = getString(R.string.app_name);
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+
+        String version = "?";
+        try
+        {
+            PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = pi.versionName;
+        }
+        catch (PackageManager.NameNotFoundException e)
+        {
+            Log.w(TAG, "Package name not found", e);
+        }
+
+        WebView wv = new WebView(this);
+        String html =
+            "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />" +
+            "<img src=\"file:///android_res/mipmap/ic_launcher.png\" alt=\"" + appName + "\"/>" +
+            "<h1>" +
+            String.format(getString(R.string.about_title_fmt),
+                    "<a href=\"" + getString(R.string.app_webpage_url)) + "\">" +
+            appName +
+            "</a>" +
+            "</h1><p>" +
+            appName +
+            " " +
+            String.format(getString(R.string.debug_version_fmt), version) +
+            "</p><p>" +
+            String.format(getString(R.string.app_revision_fmt),
+                    "<a href=\"" + getString(R.string.app_revision_url) + "\">" +
+                            getString(R.string.app_revision_url) +
+                            "</a>") +
+            "</p><hr/><p>" +
+            String.format(getString(R.string.app_copyright_fmt), year) +
+            "</p><hr/><p>" +
+            getString(R.string.app_license);
+
+        wv.loadDataWithBaseURL("file:///android_res/drawable/", html, "text/html", "utf-8", null);
+        new AlertDialog.Builder(this)
+            .setView(wv)
+            .setCancelable(true)
+            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.dismiss();
+                }
+            })
+            .show();
     }
 }

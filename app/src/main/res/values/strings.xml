@@ -1,9 +1,12 @@
-<resources>
+<resources
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
     <string name="app_name">Baby Sleep Sounds</string>
     <string name="description">Select sound and click play</string>
     <string name="sound">Sound</string>
     <string name="play">Play</string>
     <string name="stop">Stop</string>
+    <string name="ok">OK</string>
 
     <string name="sleepTimer">Sleep Timer</string>
     <string name="disabled">Disabled</string>
@@ -26,4 +29,12 @@
     <string name="waterfall">Waterfall</string>
     <string name="waves">Waves</string>
     <string name="whiteNoise">White Noise</string>
+
+    <string name="about">About</string>
+    <string name="app_copyright_fmt">Copyright 2016-<xliff:g>%s</xliff:g> Branden Archer</string>
+    <string name="app_license">Licensed under the GPLv3.</string>
+    <string name="about_title_fmt">About <xliff:g id="app_name">%s</xliff:g></string>
+    <string name="debug_version_fmt">Version: <xliff:g id="version">%s</xliff:g></string>
+    <string name="app_revision_fmt">Revision Information: <xliff:g id="app_revision_url">%s</xliff:g></string>
+    <string name="app_libraries"><xliff:g id="app_name">%s</xliff:g> uses the following third-party libraries: <xliff:g id="app_libraries_list">%s</xliff:g></string>
 </resources>
