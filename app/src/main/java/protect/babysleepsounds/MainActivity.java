@@ -1,12 +1,12 @@
 package protect.babysleepsounds;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.PowerManager;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,11 +23,18 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
 import com.google.common.collect.ImmutableMap;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -35,7 +42,9 @@ import java.util.TimerTask;
 
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+
 public class MainActivity extends AppCompatActivity
 {
     private final static String TAG = "BabySleepSounds";
@@ -43,11 +52,13 @@ public class MainActivity extends AppCompatActivity
     private Map<String, Integer> _soundMap;
     private Map<String, Integer> _timeMap;
 
-    private MediaPlayer _mediaPlayer = null;
-    private Timer _timer = null;
+    private LoopingAudioPlayer _mediaPlayer;
+    private Timer _timer;
+
     private FFmpeg _ffmpeg;
     private CheckBox _enableFilterSetting;
     private SeekBar _filterCutoffFrequencySetting;
+    private ProgressDialog _encodingProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -221,15 +232,155 @@ public class MainActivity extends AppCompatActivity
     {
         final Spinner soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
         String selectedSound = (String)soundSpinner.getSelectedItem();
-
         int id = _soundMap.get(selectedSound);
 
-        _mediaPlayer = MediaPlayer.create(MainActivity.this, id);
-        _mediaPlayer.setWakeMode(getApplicationContext(),
-                PowerManager.PARTIAL_WAKE_LOCK);
-        _mediaPlayer.setLooping(true);
-        _mediaPlayer.start();
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+        try
+        {
+            File dir = getExternalFilesDir (Environment.DIRECTORY_MUSIC);
+            if(dir == null)
+            {
+                throw new IOException("No external files dir available, cannot prepare file");
+            }
+
+            if(dir.exists() == false)
+            {
+                boolean result = dir.mkdirs();
+                if(result == false)
+                {
+                    throw new IOException("Unable to create folder in external file dir, cannot prepare file");
+                }
+            }
+
+            File originalFile = new File(dir, "original.mp3");
+
+            Log.i(TAG, "Writing file out prior to WAV conversion");
+            writeToFile(id, originalFile);
+
+            final File processed = new File(dir, "processed.raw");
+            if(processed.exists())
+            {
+                boolean result = processed.delete();
+                if(result == false)
+                {
+                    throw new IOException("Unable to delete previous file, cannot prepare new file");
+                }
+            }
+
+            Log.i(TAG, "Converting file to WAV");
+
+            LinkedList<String> arguments = new LinkedList<>();
+            arguments.add("-i");
+            arguments.add(originalFile.getAbsolutePath());
+            arguments.add("-f");
+            arguments.add("s16le");
+            arguments.add("-acodec");
+            arguments.add("pcm_s16le");
+            arguments.add(processed.getAbsolutePath());
+
+            _encodingProgress = new ProgressDialog(this);
+            _encodingProgress.setMessage(getString(R.string.preparing));
+            _encodingProgress.show();
+
+            Log.i(TAG, "Launching ffmpeg");
+            String[] cmd = arguments.toArray(new String[arguments.size()]);
+            _ffmpeg.execute(cmd, new FFmpegExecuteResponseHandler()
+            {
+                public void onStart()
+                {
+                    Log.d(TAG, "ffmpeg execute onStart()");
+                }
+
+                public void onSuccess(String message)
+                {
+                    Log.d(TAG, "ffmpeg execute onSuccess(): " + message);
+
+                    _mediaPlayer = new LoopingAudioPlayer(processed);
+                    _mediaPlayer.start();
+                    updateToPlaying();
+                }
+
+                public void onProgress(String message)
+                {
+                    Log.d(TAG, "ffmpeg execute onProgress(): " + message);
+                }
+
+                public void onFailure(String message)
+                {
+                    Log.d(TAG, "ffmpeg execute onFailure(): " + message);
+                    reportPlaybackFailure();
+                }
+
+                public void onFinish()
+                {
+                    Log.d(TAG, "ffmpeg execute onFinish()");
+                }
+            });
+        }
+        catch(IOException|FFmpegCommandAlreadyRunningException e)
+        {
+            Log.i(TAG, "Failed to start playback", e);
+            reportPlaybackFailure();
+        }
+    }
+
+    /**
+     * Write a resource to a file
+     * @param resource resource to write
+     * @param output destination of the resource
+     * @throws IOException if a write failure occurs
+     */
+    private void writeToFile(int resource, File output) throws IOException
+    {
+        InputStream rawStream = getResources().openRawResource(resource);
+        FileOutputStream outStream = null;
+
+        byte[] buff = new byte[1024];
+        int read;
+
+        try
+        {
+            outStream = new FileOutputStream(output);
+
+            while ((read = rawStream.read(buff)) > 0)
+            {
+                outStream.write(buff, 0, read);
+            }
+        }
+        finally
+        {
+            try
+            {
+                rawStream.close();
+            }
+            catch(IOException e)
+            {
+                // If it fails, there is nothing to do
+            }
+
+            if(outStream != null)
+            {
+                outStream.close();
+            }
+        }
+    }
+
+    /**
+     * Report to the user that playback has failed, and hide the progress dialog
+     */
+    private void reportPlaybackFailure()
+    {
+        _encodingProgress.hide();
+        _encodingProgress = null;
+        Toast.makeText(this, R.string.playbackFailure, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * Update the UI to reflect it is playing
+     */
+    private void updateToPlaying()
+    {
         final Spinner sleepTimeoutSpinner = (Spinner) findViewById(R.id.sleepTimerSpinner);
         String selectedTimeout = (String)sleepTimeoutSpinner.getSelectedItem();
         int timeoutMs = _timeMap.get(selectedTimeout);
@@ -253,6 +404,9 @@ public class MainActivity extends AppCompatActivity
             {
                 final Button button = (Button) findViewById(R.id.button);
                 button.setText(R.string.stop);
+
+                _encodingProgress.hide();
+                _encodingProgress = null;
             }
         });
     }
@@ -260,7 +414,6 @@ public class MainActivity extends AppCompatActivity
     private void stopPlayback()
     {
         _mediaPlayer.stop();
-        _mediaPlayer.release();
         _mediaPlayer = null;
 
         if(_timer != null)
@@ -287,7 +440,6 @@ public class MainActivity extends AppCompatActivity
         if(_mediaPlayer != null)
         {
             _mediaPlayer.stop();
-            _mediaPlayer.release();
         }
 
         super.onDestroy();
