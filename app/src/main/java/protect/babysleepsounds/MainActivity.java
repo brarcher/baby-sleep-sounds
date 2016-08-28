@@ -273,6 +273,12 @@ public class MainActivity extends AppCompatActivity
             LinkedList<String> arguments = new LinkedList<>();
             arguments.add("-i");
             arguments.add(originalFile.getAbsolutePath());
+            if(_enableFilterSetting.isChecked())
+            {
+                Log.i(TAG, "Will perform lowpass filter to " + _filterCutoffFrequencySetting.getProgress() + " Hz");
+                arguments.add("-af");
+                arguments.add("lowpass=frequency=" + _filterCutoffFrequencySetting.getProgress());
+            }
             arguments.add("-f");
             arguments.add("s16le");
             arguments.add("-acodec");
