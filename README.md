@@ -11,6 +11,10 @@ play in a loop until stopped.
 
 If there is any interest in improving this project, kindly submit a pull request with proposed changed.
 
+# Screenshot
+
+![screenshot_2016-08-28-18-08-41](https://cloud.githubusercontent.com/assets/5264535/18037126/c0bb6150-6d4a-11e6-9d00-8b8546499e6a.png)
+
 # Building
 
 To build, use the gradle wrapper scripts provided in the top level directory of the project. The following will
