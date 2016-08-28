@@ -30,6 +30,9 @@
     <string name="waves">Waves</string>
     <string name="whiteNoise">White Noise</string>
 
+    <string name="preparing">Preparing&#8230;</string>
+    <string name="enableLowPassFilter">Enable Low Pass Filter</string>
+    <string name="filterCutoff">Filter cutoff: <xliff:g id="frequency">%d</xliff:g> Hz</string>
     <string name="playbackNotSupported">Playback now supported, see logs for details</string>
 
     <string name="about">About</string>

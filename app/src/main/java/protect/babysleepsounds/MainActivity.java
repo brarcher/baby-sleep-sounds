@@ -17,8 +17,12 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity
     private MediaPlayer _mediaPlayer = null;
     private Timer _timer = null;
     private FFmpeg _ffmpeg;
+    private CheckBox _enableFilterSetting;
+    private SeekBar _filterCutoffFrequencySetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -152,6 +158,55 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "ffmpeg not supported", e);
             reportPlaybackUnsupported();
         }
+
+        final View filterFrequencyReadout = findViewById(R.id.filterFrequencyReadout);
+        final View filterFrequencyLayout = findViewById(R.id.filterFrequencyLayout);
+        _enableFilterSetting = (CheckBox)findViewById(R.id.enableFilter);
+        _enableFilterSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                filterFrequencyLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                filterFrequencyReadout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        _filterCutoffFrequencySetting = (SeekBar)findViewById(R.id.filterFrequencyBar);
+        _filterCutoffFrequencySetting.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                updateFrequencyReadout(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
+                // Nothing to do
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+                // Nothing to do
+            }
+        });
+
+        // Set initial value
+        updateFrequencyReadout(_filterCutoffFrequencySetting.getProgress());
+    }
+
+    /**
+     * Update the TextView containing the frequency to the given value
+     * @param frequency value to update the field with
+     */
+    private void updateFrequencyReadout(int frequency)
+    {
+        final TextView filterFrequency = (TextView) findViewById(R.id.filterFrequencyText);
+        String readout = String.format(getString(R.string.filterCutoff), frequency);
+        filterFrequency.setText(readout);
     }
 
     /**
