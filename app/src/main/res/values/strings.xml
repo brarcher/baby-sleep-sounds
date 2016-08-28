@@ -23,12 +23,17 @@
     <string name="ocean">Ocean</string>
     <string name="rain">Rain</string>
     <string name="refrigerator">Refrigerator</string>
-    <string name="train">Train</string>
     <string name="vacuum">Vacuum</string>
     <string name="water">Water</string>
     <string name="waterfall">Waterfall</string>
     <string name="waves">Waves</string>
     <string name="whiteNoise">White Noise</string>
+
+    <string name="preparing">Preparing&#8230;</string>
+    <string name="enableLowPassFilter">Enable Low Pass Filter</string>
+    <string name="filterCutoff">Filter cutoff: <xliff:g id="frequency">%d</xliff:g> Hz</string>
+    <string name="playbackNotSupported">Playback now supported, see logs for details</string>
+    <string name="playbackFailure">Unable to play file, see logs for details</string>
 
     <string name="about">About</string>
     <string name="app_copyright_fmt">Copyright 2016-<xliff:g>%s</xliff:g> Branden Archer</string>
@@ -37,4 +42,5 @@
     <string name="debug_version_fmt">Version: <xliff:g id="version">%s</xliff:g></string>
     <string name="app_revision_fmt">Revision Information: <xliff:g id="app_revision_url">%s</xliff:g></string>
     <string name="sound_resources"><xliff:g id="app_name">%s</xliff:g> uses sound resources from: <xliff:g id="sound_sources_list">%s</xliff:g></string>
+    <string name="app_libraries"><xliff:g id="app_name">%s</xliff:g> uses the following third-party libraries or programs: <xliff:g id="app_libraries_list">%s</xliff:g></string>
 </resources>
