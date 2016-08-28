@@ -414,6 +414,8 @@ public class MainActivity extends AppCompatActivity
                 final Button button = (Button) findViewById(R.id.button);
                 button.setText(R.string.stop);
 
+                setControlsEnabled(false);
+
                 _encodingProgress.hide();
                 _encodingProgress = null;
             }
@@ -439,8 +441,20 @@ public class MainActivity extends AppCompatActivity
             {
                 final Button button = (Button) findViewById(R.id.button);
                 button.setText(R.string.play);
+
+                setControlsEnabled(true);
             }
         });
+    }
+
+    private void setControlsEnabled(boolean enabled)
+    {
+        for(int resId : new int[]{R.id.soundSpinner, R.id.sleepTimerSpinner,
+                R.id.enableFilter, R.id.filterFrequencyBar})
+        {
+            final View view = findViewById(resId);
+            view.setEnabled(enabled);
+        }
     }
 
     @Override
