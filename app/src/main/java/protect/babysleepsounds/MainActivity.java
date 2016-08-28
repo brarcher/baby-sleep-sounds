@@ -68,6 +68,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // These sound files by convention are:
+        // ~10 seconds long
+        // Have a 2 second fade-in and fade-out
+        // mp3 file, 128kbps, stereo
         _soundMap = ImmutableMap.<String, Integer>builder()
             .put(getResources().getString(R.string.dryer), R.raw.dryer)
             .put(getResources().getString(R.string.ocean), R.raw.ocean)
