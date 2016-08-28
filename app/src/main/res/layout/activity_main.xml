@@ -93,6 +93,7 @@
                           android:layout_height="wrap_content"
                           android:baselineAligned="true">
                 <Button android:id="@+id/button"
+                        android:enabled="false"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/play"

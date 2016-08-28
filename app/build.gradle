@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId "protect.babysleepsounds"
-        minSdkVersion 10
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 3
         versionName "0.3"
@@ -38,6 +38,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    compile 'com.writingminds:FFmpegAndroid:0.3.2'
 }
 
 task findbugs(type: FindBugs, dependsOn: assembleDebug) {

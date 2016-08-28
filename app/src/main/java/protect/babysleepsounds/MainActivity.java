@@ -18,6 +18,7 @@ import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -28,6 +29,9 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 public class MainActivity extends AppCompatActivity
 {
     private final static String TAG = "BabySleepSounds";
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity
 
     private MediaPlayer _mediaPlayer = null;
     private Timer _timer = null;
+    private FFmpeg _ffmpeg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -107,6 +112,54 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+        _ffmpeg = FFmpeg.getInstance(this);
+
+        try
+        {
+            _ffmpeg.loadBinary(new LoadBinaryResponseHandler()
+            {
+
+                @Override
+                public void onStart()
+                {
+                    Log.d(TAG, "ffmpeg.loadBinary onStart()");
+                }
+
+                @Override
+                public void onFailure()
+                {
+                    Log.d(TAG, "ffmpeg.loadBinary onFailure()");
+                    reportPlaybackUnsupported();
+                }
+
+                @Override
+                public void onSuccess()
+                {
+                    Log.d(TAG, "ffmpeg.loadBinary onSuccess()");
+                    button.setEnabled(true);
+                }
+
+                @Override
+                public void onFinish()
+                {
+                    Log.d(TAG, "ffmpeg.loadBinary onFinish()");
+                }
+            });
+        }
+        catch (FFmpegNotSupportedException e)
+        {
+            Log.d(TAG, "ffmpeg not supported", e);
+            reportPlaybackUnsupported();
+        }
+    }
+
+    /**
+     * Report to the user that playback is not supported on this device
+     */
+    private void reportPlaybackUnsupported()
+    {
+        Toast.makeText(this, R.string.playbackNotSupported, Toast.LENGTH_LONG).show();
     }
 
     private void startPlayback()
@@ -208,6 +261,19 @@ public class MainActivity extends AppCompatActivity
 
     private void displayAboutDialog()
     {
+        final String[][] USED_LIBRARIES = new String[][]
+        {
+                new String[] {"FFmpeg", "https://ffmpeg.org/"},
+                new String[] {"FFmpeg-Android", "https://github.com/writingminds/ffmpeg-android"},
+        };
+
+        StringBuilder libs = new StringBuilder().append("<ul>");
+        for (String[] library : USED_LIBRARIES)
+        {
+            libs.append("<li><a href=\"").append(library[1]).append("\">").append(library[0]).append("</a></li>");
+        }
+        libs.append("</ul>");
+
         String appName = getString(R.string.app_name);
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -258,7 +324,9 @@ public class MainActivity extends AppCompatActivity
             "</p><hr/><p>" +
             getString(R.string.app_license) +
             "</p><hr/><p>" +
-            String.format(getString(R.string.sound_resources), appName, soundResources.toString());
+            String.format(getString(R.string.sound_resources), appName, soundResources.toString()) +
+            "</p><hr/><p>" +
+            String.format(getString(R.string.app_libraries), appName, libs.toString());
 
         wv.loadDataWithBaseURL("file:///android_res/drawable/", html, "text/html", "utf-8", null);
         new AlertDialog.Builder(this)
