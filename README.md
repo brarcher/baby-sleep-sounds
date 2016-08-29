@@ -41,9 +41,12 @@ and are distributed under the CC BY-NC-SA 3.0 License:
 The following sound resources were created by [MC2Method.org](http://mc2method.org/white-noise/)
 and are distributed under the condition of "Personal Use":
   - dryer.mp3
+  - fan.mp3
   - ocean.mp3
   - rain.mp3
   - refrigerator.mp3
+  - shower.mp3
+  - stream.mp3
   - vacuum.mp3
   - water.mp3
   - waterfall.mp3
