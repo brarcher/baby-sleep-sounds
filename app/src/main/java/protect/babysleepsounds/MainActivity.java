@@ -74,9 +74,12 @@ public class MainActivity extends AppCompatActivity
         // mp3 file, 128kbps, stereo
         _soundMap = ImmutableMap.<String, Integer>builder()
             .put(getResources().getString(R.string.dryer), R.raw.dryer)
+            .put(getResources().getString(R.string.fan), R.raw.fan)
             .put(getResources().getString(R.string.ocean), R.raw.ocean)
             .put(getResources().getString(R.string.rain), R.raw.rain)
             .put(getResources().getString(R.string.refrigerator), R.raw.refrigerator)
+            .put(getResources().getString(R.string.shower), R.raw.shower)
+            .put(getResources().getString(R.string.stream), R.raw.stream)
             .put(getResources().getString(R.string.vacuum), R.raw.vacuum)
             .put(getResources().getString(R.string.water), R.raw.water)
             .put(getResources().getString(R.string.waterfall), R.raw.waterfall)

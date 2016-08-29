@@ -20,9 +20,12 @@
     <string name="time_8hour">8 Hours</string>
 
     <string name="dryer">Dryer</string>
+    <string name="fan">Fan</string>
     <string name="ocean">Ocean</string>
     <string name="rain">Rain</string>
     <string name="refrigerator">Refrigerator</string>
+    <string name="shower">Shower</string>
+    <string name="stream">Stream</string>
     <string name="vacuum">Vacuum</string>
     <string name="water">Water</string>
     <string name="waterfall">Waterfall</string>
