@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity
     {
         if(_encodingProgress != null)
         {
-            _encodingProgress.hide();
+            _encodingProgress.dismiss();
             _encodingProgress = null;
         }
 
