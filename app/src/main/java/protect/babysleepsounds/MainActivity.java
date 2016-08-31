@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
-                updateFrequencyReadout(progress);
+                updateFrequencyReadout(getFrequencyReadout());
             }
 
             @Override
@@ -214,7 +214,20 @@ public class MainActivity extends AppCompatActivity
         });
 
         // Set initial value
-        updateFrequencyReadout(_filterCutoffFrequencySetting.getProgress());
+        updateFrequencyReadout(getFrequencyReadout());
+    }
+
+    /**
+     * Retrieve the value of the frequency readout, accounting for any
+     * offset or adjustments
+     */
+    private int getFrequencyReadout()
+    {
+        int rawValue = _filterCutoffFrequencySetting.getProgress();
+        // The data represented by the frequency bar starts at 200, so we need to add
+        // this offset to the value, as the bar's value always starts at 0.
+        int actualValue = 200 + rawValue;
+        return actualValue;
     }
 
     /**
@@ -268,9 +281,11 @@ public class MainActivity extends AppCompatActivity
             arguments.add(originalFile.getAbsolutePath());
             if(_enableFilterSetting.isChecked())
             {
-                Log.i(TAG, "Will perform lowpass filter to " + _filterCutoffFrequencySetting.getProgress() + " Hz");
+                int frequencyValue = getFrequencyReadout();
+
+                Log.i(TAG, "Will perform lowpass filter to " + frequencyValue + " Hz");
                 arguments.add("-af");
-                arguments.add("lowpass=frequency=" + _filterCutoffFrequencySetting.getProgress());
+                arguments.add("lowpass=frequency=" + frequencyValue);
             }
             arguments.add("-f");
             arguments.add("s16le");
