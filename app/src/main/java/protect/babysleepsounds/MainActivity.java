@@ -383,8 +383,12 @@ public class MainActivity extends AppCompatActivity
      */
     private void reportPlaybackFailure()
     {
-        _encodingProgress.hide();
-        _encodingProgress = null;
+        if(_encodingProgress != null)
+        {
+            _encodingProgress.hide();
+            _encodingProgress = null;
+        }
+
         Toast.makeText(this, R.string.playbackFailure, Toast.LENGTH_LONG).show();
     }
 
