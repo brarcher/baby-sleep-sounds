@@ -459,6 +459,16 @@ public class MainActivity extends AppCompatActivity
             _mediaPlayer.stop();
         }
 
+        for(String toDelete : new String[]{ORIGINAL_MP3_FILE, PROCESSED_RAW_FILE})
+        {
+            File file = new File(getFilesDir(), toDelete);
+            boolean result = file.delete();
+            if(result == false)
+            {
+                Log.w(TAG, "Failed to delete file on exit: " + file.getAbsolutePath());
+            }
+        }
+
         super.onDestroy();
     }
 
