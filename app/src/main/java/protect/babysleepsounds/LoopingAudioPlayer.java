@@ -154,10 +154,7 @@ class FadingAudioPlayer implements Runnable
         }
         finally
         {
-            if(audioTrack.getState() != AudioTrack.STATE_UNINITIALIZED)
-            {
-                audioTrack.stop();
-            }
+            audioTrack.release();
 
             try
             {
