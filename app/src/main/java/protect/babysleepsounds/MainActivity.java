@@ -6,7 +6,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -48,6 +47,9 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedExceptio
 public class MainActivity extends AppCompatActivity
 {
     private final static String TAG = "BabySleepSounds";
+
+    private static final String ORIGINAL_MP3_FILE = "original.mp3";
+    private static final String PROCESSED_RAW_FILE = "processed.raw";
 
     private Map<String, Integer> _soundMap;
     private Map<String, Integer> _timeMap;
@@ -244,27 +246,12 @@ public class MainActivity extends AppCompatActivity
 
         try
         {
-            File dir = getExternalFilesDir (Environment.DIRECTORY_MUSIC);
-            if(dir == null)
-            {
-                throw new IOException("No external files dir available, cannot prepare file");
-            }
-
-            if(dir.exists() == false)
-            {
-                boolean result = dir.mkdirs();
-                if(result == false)
-                {
-                    throw new IOException("Unable to create folder in external file dir, cannot prepare file");
-                }
-            }
-
-            File originalFile = new File(dir, "original.mp3");
+            File originalFile = new File(getFilesDir(), ORIGINAL_MP3_FILE);
 
             Log.i(TAG, "Writing file out prior to WAV conversion");
             writeToFile(id, originalFile);
 
-            final File processed = new File(dir, "processed.raw");
+            final File processed = new File(getFilesDir(), PROCESSED_RAW_FILE);
             if(processed.exists())
             {
                 boolean result = processed.delete();
