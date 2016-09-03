@@ -22,7 +22,6 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
 import com.google.common.collect.ImmutableMap;
@@ -71,9 +70,11 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         // These sound files by convention are:
-        // ~10 seconds long
-        // Have a 2 second fade-in and fade-out
-        // mp3 file, 128kbps, stereo
+        // - take a ~10 second clip
+        // - Apply a 2 second fade-in and fade-out
+        // - Cut the first 3 seconds, and place it over the last three seconds
+        //   which should create a seamless track appropriate for looping
+        // - Save as a mp3 file, 128kbps, stereo
         _soundMap = ImmutableMap.<String, Integer>builder()
             .put(getResources().getString(R.string.dryer), R.raw.dryer)
             .put(getResources().getString(R.string.fan), R.raw.fan)
@@ -310,7 +311,7 @@ public class MainActivity extends AppCompatActivity
                 {
                     Log.d(TAG, "ffmpeg execute onSuccess(): " + message);
 
-                    _mediaPlayer = new LoopingAudioPlayer(processed);
+                    _mediaPlayer = new LoopingAudioPlayer(MainActivity.this, processed);
                     _mediaPlayer.start();
                     updateToPlaying();
                 }
