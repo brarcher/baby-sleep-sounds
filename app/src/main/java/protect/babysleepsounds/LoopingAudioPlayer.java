@@ -1,8 +1,10 @@
 package protect.babysleepsounds;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.os.PowerManager;
 import android.util.Log;
 
 import java.io.File;
@@ -13,191 +15,129 @@ public class LoopingAudioPlayer
 {
     public static final String TAG = "BabySleepSounds";
 
-    private final File _wavFile;
-    private Thread _thread1;
-    private Thread _thread2;
+    private static final int FREQUENCY = 44100;
+    private static final int CHANNEL_CONFIGURATION = AudioFormat.CHANNEL_OUT_STEREO;
+    private static final int AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
-    public LoopingAudioPlayer(File wavFile)
+    private final File _wavFile;
+    private final PowerManager.WakeLock _wakeLock;
+
+    public LoopingAudioPlayer(Context context, File wavFile)
     {
         _wavFile = wavFile;
+
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if(powerManager != null)
+        {
+            _wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+        }
+        else
+        {
+            Log.w(TAG, "Failed to acquire a wakelock");
+            _wakeLock = null;
+        }
     }
 
     public void start()
     {
-        stop();
+        if(_playbackThread != null)
+        {
+            if(_wakeLock != null)
+            {
+                _wakeLock.acquire();
+            }
 
-        ToggleWaiter first = new ToggleWaiter();
-        ToggleWaiter second = new ToggleWaiter();
-
-        _thread1 = new Thread(new FadingAudioPlayer(_wavFile, first, second), "PlayThread1");
-        _thread2 = new Thread(new FadingAudioPlayer(_wavFile, second, first), "PlayThread2");
-
-        _thread1.start();
-        _thread2.start();
-
-        // Start the first thread playing
-        first.set();
+            _playbackThread.start();
+        }
+        else
+        {
+            Log.w(TAG, "Audio playback already stopped, cannot start again");
+        }
     }
 
     public void stop()
     {
         Log.i(TAG, "Requesting audio playback to stop");
 
-        if(_thread1 != null && _thread2 != null)
+        if(_playbackThread != null)
         {
-            _thread1.interrupt();
-            _thread2.interrupt();
+            _playbackThread.interrupt();
+            _playbackThread = null;
 
-            _thread1 = null;
-            _thread2 = null;
+            if(_wakeLock != null)
+            {
+                _wakeLock.release();
+            }
         }
     }
-}
 
-class FadingAudioPlayer implements Runnable
-{
-    public static final String TAG = "BabySleepSounds";
-
-    private static final int OVERLAP_AUDIO_START_SEC = 3;
-
-    private static final int FREQUENCY = 44100;
-    private static final int CHANNEL_CONFIGURATION = AudioFormat.CHANNEL_OUT_STEREO;
-    private static final int AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
-
-    private final File _wavFile;
-    private final ToggleWaiter _waitToggle;
-    private final ToggleWaiter _releaseToggle;
-
-    public FadingAudioPlayer(File wavFile, ToggleWaiter waitToggle, ToggleWaiter releaseToggle)
+    private Thread _playbackThread = new Thread(new Runnable()
     {
-        _wavFile = wavFile;
-        _waitToggle = waitToggle;
-        _releaseToggle = releaseToggle;
-    }
-
-    public void run()
-    {
-        Log.i(TAG, "Setting up stream");
-
-        final int bufferSize = AudioTrack.getMinBufferSize(FREQUENCY, CHANNEL_CONFIGURATION, AUDIO_ENCODING);
-        final int byteBufferSize = bufferSize*2;
-
-        final AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-                FREQUENCY,
-                CHANNEL_CONFIGURATION,
-                AUDIO_ENCODING,
-                bufferSize,
-                AudioTrack.MODE_STREAM);
-
-        audioTrack.setPlaybackPositionUpdateListener(new AudioTrack.OnPlaybackPositionUpdateListener()
+        @Override
+        public void run()
         {
-            @Override
-            public void onMarkerReached(AudioTrack track)
+            Log.i(TAG, "Setting up audio playback");
+
+            final int bufferSize = AudioTrack.getMinBufferSize(FREQUENCY, CHANNEL_CONFIGURATION, AUDIO_ENCODING);
+            final int byteBufferSize = bufferSize*2;
+
+            final AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+                    FREQUENCY,
+                    CHANNEL_CONFIGURATION,
+                    AUDIO_ENCODING,
+                    bufferSize,
+                    AudioTrack.MODE_STREAM);
+
+            FileInputStream is = null;
+
+            try
             {
-                Log.d(TAG, "Starting other audio thread to overlap");
-                _releaseToggle.set();
-            }
-
-            @Override
-            public void onPeriodicNotification(AudioTrack track)
-            {
-                // Nothing to do
-            }
-        });
-
-        int framesInFile = (int)_wavFile.length()/2/2;
-        int fadeOutFrames = OVERLAP_AUDIO_START_SEC * FREQUENCY;
-        int fadeOutFrameStart = framesInFile - fadeOutFrames;
-
-        FileInputStream is = null;
-
-        try
-        {
-            while(Thread.currentThread().isInterrupted() == false)
-            {
-                // Wait to start
-                _waitToggle.waitUntilSet();
-
-                // The file contains bytes, but the PCM data in 16 bit, so /2 to get samples.
-                // The file also is stereo instead of mono, so /2 for two different tracks.
-
-                audioTrack.setNotificationMarkerPosition(fadeOutFrameStart);
-
-                is = new FileInputStream(_wavFile);
                 final byte [] buffer = new byte[byteBufferSize];
-                int read;
-
                 audioTrack.play();
 
                 while(Thread.currentThread().isInterrupted() == false)
                 {
-                    read = is.read(buffer);
+                    Log.d(TAG, "Restarting audio file");
+                    is = new FileInputStream(_wavFile);
+                    int read;
 
-                    if(read <= 0)
+                    while(Thread.currentThread().isInterrupted() == false)
                     {
-                        break;
+                        read = is.read(buffer);
+
+                        if(read <= 0)
+                        {
+                            break;
+                        }
+
+                        audioTrack.write(buffer, 0, read);
                     }
 
-                    audioTrack.write(buffer, 0, read);
-                }
-
-                audioTrack.stop();
-            }
-        }
-        catch(IOException e)
-        {
-            Log.d(TAG, "Failed to read file", e);
-        }
-        catch(InterruptedException e)
-        {
-            Log.d(TAG, "Terminating due to being interrupted", e);
-        }
-        finally
-        {
-            audioTrack.release();
-
-            try
-            {
-                if(is != null)
-                {
-                    is.close();
+                    // File completed playback, start again
                 }
             }
             catch(IOException e)
             {
-                Log.d(TAG, "Failed to close file", e);
+                Log.d(TAG, "Failed to read file", e);
             }
-        }
-
-        Log.i(TAG, "Finished playback");
-    }
-}
-
-class ToggleWaiter
-{
-    private boolean isSet = false;
-
-    public void set()
-    {
-        synchronized(this)
-        {
-            isSet = true;
-            notify();
-        }
-    }
-
-    public void waitUntilSet() throws InterruptedException
-    {
-        synchronized(this)
-        {
-            while(isSet == false)
+            finally
             {
-                wait();
+                audioTrack.release();
+
+                try
+                {
+                    if(is != null)
+                    {
+                        is.close();
+                    }
+                }
+                catch(IOException e)
+                {
+                    Log.d(TAG, "Failed to close file", e);
+                }
             }
 
-            isSet = false;
+            Log.i(TAG, "Finished playback");
         }
-    }
-
-
+    }, "PlaybackThread");
 }
