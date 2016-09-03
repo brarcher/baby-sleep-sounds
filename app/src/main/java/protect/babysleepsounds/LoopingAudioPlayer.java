@@ -97,7 +97,6 @@ public class LoopingAudioPlayer
 
                 while(Thread.currentThread().isInterrupted() == false)
                 {
-                    Log.d(TAG, "Restarting audio file");
                     is = new FileInputStream(_wavFile);
                     int read;
 
