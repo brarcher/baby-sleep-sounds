@@ -97,7 +97,6 @@ public class LoopingAudioPlayer
 
                 while(Thread.currentThread().isInterrupted() == false)
                 {
-                    Log.d(TAG, "Restarting audio file");
                     is = new FileInputStream(_wavFile);
                     int read;
 
@@ -114,6 +113,14 @@ public class LoopingAudioPlayer
                     }
 
                     // File completed playback, start again
+                    try
+                    {
+                        is.close();
+                    }
+                    catch(IOException e)
+                    {
+                        // Nothing to do, we are finished with the file anyway
+                    }
                 }
             }
             catch(IOException e)
@@ -122,8 +129,6 @@ public class LoopingAudioPlayer
             }
             finally
             {
-                audioTrack.release();
-
                 try
                 {
                     if(is != null)
@@ -135,6 +140,8 @@ public class LoopingAudioPlayer
                 {
                     Log.d(TAG, "Failed to close file", e);
                 }
+
+                audioTrack.release();
             }
 
             Log.i(TAG, "Finished playback");
