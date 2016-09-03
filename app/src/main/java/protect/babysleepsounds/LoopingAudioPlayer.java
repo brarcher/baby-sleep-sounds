@@ -114,6 +114,14 @@ public class LoopingAudioPlayer
                     }
 
                     // File completed playback, start again
+                    try
+                    {
+                        is.close();
+                    }
+                    catch(IOException e)
+                    {
+                        // Nothing to do, we are finished with the file anyway
+                    }
                 }
             }
             catch(IOException e)
