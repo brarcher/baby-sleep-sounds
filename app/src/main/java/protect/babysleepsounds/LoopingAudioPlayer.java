@@ -129,8 +129,6 @@ public class LoopingAudioPlayer
             }
             finally
             {
-                audioTrack.release();
-
                 try
                 {
                     if(is != null)
@@ -142,6 +140,8 @@ public class LoopingAudioPlayer
                 {
                     Log.d(TAG, "Failed to close file", e);
                 }
+
+                audioTrack.release();
             }
 
             Log.i(TAG, "Finished playback");
