@@ -511,11 +511,17 @@ public class MainActivity extends AppCompatActivity
 
     private void displayAboutDialog()
     {
-        final String[][] USED_LIBRARIES = new String[][]
-        {
-                new String[] {"FFmpeg", "https://ffmpeg.org/"},
-                new String[] {"FFmpeg-Android", "https://github.com/writingminds/ffmpeg-android"},
-        };
+        final Map<String, String> USED_LIBRARIES = ImmutableMap.of
+        (
+            "FFmpeg", "https://ffmpeg.org/",
+            "FFmpeg-Android", "https://github.com/writingminds/ffmpeg-android"
+        );
+
+        final Map<String, String> SOUND_RESOURCES = ImmutableMap.of
+        (
+            "Canton Becker", "http://whitenoise.cantonbecker.com/",
+            "The MC2 Method", "http://mc2method.org/white-noise/"
+        );
 
         final Map<String, String> IMAGE_RESOURCES = ImmutableMap.of
         (
@@ -523,11 +529,18 @@ public class MainActivity extends AppCompatActivity
         );
 
         StringBuilder libs = new StringBuilder().append("<ul>");
-        for (String[] library : USED_LIBRARIES)
+        for (Map.Entry<String, String> entry : USED_LIBRARIES.entrySet())
         {
-            libs.append("<li><a href=\"").append(library[1]).append("\">").append(library[0]).append("</a></li>");
+            libs.append("<li><a href=\"").append(entry.getValue()).append("\">").append(entry.getKey()).append("</a></li>");
         }
         libs.append("</ul>");
+
+        StringBuilder soundResources = new StringBuilder().append("<ul>");
+        for (Map.Entry<String, String> entry : SOUND_RESOURCES.entrySet())
+        {
+            soundResources.append("<li><a href=\"").append(entry.getValue()).append("\">").append(entry.getKey()).append("</a></li>");
+        }
+        soundResources.append("</ul>");
 
         StringBuilder imageResources = new StringBuilder().append("<ul>");
         for (Map.Entry<String, String> entry : IMAGE_RESOURCES.entrySet())
@@ -549,19 +562,6 @@ public class MainActivity extends AppCompatActivity
         {
             Log.w(TAG, "Package name not found", e);
         }
-
-        final String[][] SOUND_RESOURCES = new String[][]
-        {
-            new String[] {"Canton Becker", "http://whitenoise.cantonbecker.com/"},
-            new String[] {"The MC2 Method", "http://mc2method.org/white-noise/"},
-        };
-
-        StringBuilder soundResources = new StringBuilder().append("<ul>");
-        for (String[] resource : SOUND_RESOURCES)
-        {
-            soundResources.append("<li><a href=\"").append(resource[1]).append("\">").append(resource[0]).append("</a></li>");
-        }
-        soundResources.append("</ul>");
 
         WebView wv = new WebView(this);
         String html =
