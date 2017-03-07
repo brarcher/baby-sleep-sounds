@@ -517,12 +517,24 @@ public class MainActivity extends AppCompatActivity
                 new String[] {"FFmpeg-Android", "https://github.com/writingminds/ffmpeg-android"},
         };
 
+        final Map<String, String> IMAGE_RESOURCES = ImmutableMap.of
+        (
+            "'Music' by Aleks from the Noun Project", "https://thenounproject.com/term/music/886761/"
+        );
+
         StringBuilder libs = new StringBuilder().append("<ul>");
         for (String[] library : USED_LIBRARIES)
         {
             libs.append("<li><a href=\"").append(library[1]).append("\">").append(library[0]).append("</a></li>");
         }
         libs.append("</ul>");
+
+        StringBuilder imageResources = new StringBuilder().append("<ul>");
+        for (Map.Entry<String, String> entry : IMAGE_RESOURCES.entrySet())
+        {
+            imageResources.append("<li><a href=\"").append(entry.getValue()).append("\">").append(entry.getKey()).append("</a></li>");
+        }
+        imageResources.append("</ul>");
 
         String appName = getString(R.string.app_name);
         int year = Calendar.getInstance().get(Calendar.YEAR);
@@ -575,6 +587,8 @@ public class MainActivity extends AppCompatActivity
             getString(R.string.app_license) +
             "</p><hr/><p>" +
             String.format(getString(R.string.sound_resources), appName, soundResources.toString()) +
+            "</p><hr/><p>" +
+            String.format(getString(R.string.image_resources), appName, imageResources.toString()) +
             "</p><hr/><p>" +
             String.format(getString(R.string.app_libraries), appName, libs.toString());
 
