@@ -32,7 +32,7 @@ Windows:
 
 # Thanks
 
-App icon made by Freepik from www.flaticon.com
+App icon '[Music](https://thenounproject.com/term/music/886761/)' by Aleks from the Noun Project.
 
 The following sound resources were created by [Canton Becker](http://whitenoise.cantonbecker.com)
 and are distributed under the CC BY-NC-SA 3.0 License:

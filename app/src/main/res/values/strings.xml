@@ -45,5 +45,6 @@
     <string name="debug_version_fmt">Version: <xliff:g id="version">%s</xliff:g></string>
     <string name="app_revision_fmt">Revision Information: <xliff:g id="app_revision_url">%s</xliff:g></string>
     <string name="sound_resources"><xliff:g id="app_name">%s</xliff:g> uses sound resources from: <xliff:g id="sound_sources_list">%s</xliff:g></string>
+    <string name="image_resources"><xliff:g id="app_name">%s</xliff:g> uses image resources from: <xliff:g id="sound_sources_list">%s</xliff:g></string>
     <string name="app_libraries"><xliff:g id="app_name">%s</xliff:g> uses the following third-party libraries or programs: <xliff:g id="app_libraries_list">%s</xliff:g></string>
 </resources>
