@@ -13,7 +13,8 @@ If there is any interest in improving this project, kindly submit a pull request
 
 # Screenshot
 
-![screenshot_2016-08-28-18-08-41](https://cloud.githubusercontent.com/assets/5264535/18037126/c0bb6150-6d4a-11e6-9d00-8b8546499e6a.png)
+[<img src="https://cloud.githubusercontent.com/assets/5264535/23639172/16b26352-02b4-11e7-945b-fe87f1d9abd2.png" width=250>](https://cloud.githubusercontent.com/assets/5264535/23639172/16b26352-02b4-11e7-945b-fe87f1d9abd2.png)
+[<img src="https://cloud.githubusercontent.com/assets/5264535/23639173/17c710d0-02b4-11e7-8030-85b0cedab112.png" width=250>](https://cloud.githubusercontent.com/assets/5264535/23639173/17c710d0-02b4-11e7-8030-85b0cedab112.png)
 
 # Building
 
