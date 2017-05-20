@@ -15,8 +15,7 @@ android:
     # Additional components
     - extra
 
-script: ./gradlew build lint findbugs test
+script: ./gradlew assembleRelease testReleaseUnitTest lintRelease findbugs
 
 after_failure:
-- cat app/build/outputs/lint-results.xml
 - cat app/build/reports/findbugs/findbugs.html
