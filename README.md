@@ -1,22 +1,23 @@
 # Baby Sleep Sounds
-Play select sounds to help a baby sleep
-
 [![Build Status](https://travis-ci.org/brarcher/baby-sleep-sounds.svg?branch=master)](https://travis-ci.org/brarcher/baby-sleep-sounds)
 
-[![F-Droid](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Get_it_on_F-Droid.svg/160px-Get_it_on_F-Droid.svg.png)](https://f-droid.org/repository/browse/?fdid=protect.babysleepsounds "Baby Sleep Sounds on F-Droid")
+Play select sounds to help a baby sleep
 
+<a href="https://f-droid.org/packages/protect.babysleepsounds/" target="_blank">
+<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="90"/></a>
+<a href="https://play.google.com/store/apps/details?id=protect.babysleepsounds.play" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="90"/></a>
 
-This application includes several audio files which when selected will
-play in a loop until stopped.
+This application includes several audio files which when selected will play in a loop until stopped.
 
 If there is any interest in improving this project, kindly submit a pull request with proposed changed.
 
-# Screenshot
+## Screenshot
 
 [<img src="https://cloud.githubusercontent.com/assets/5264535/23639172/16b26352-02b4-11e7-945b-fe87f1d9abd2.png" width=250>](https://cloud.githubusercontent.com/assets/5264535/23639172/16b26352-02b4-11e7-945b-fe87f1d9abd2.png)
 [<img src="https://cloud.githubusercontent.com/assets/5264535/23639173/17c710d0-02b4-11e7-8030-85b0cedab112.png" width=250>](https://cloud.githubusercontent.com/assets/5264535/23639173/17c710d0-02b4-11e7-8030-85b0cedab112.png)
 
-# Building
+## Building
 
 To build, use the gradle wrapper scripts provided in the top level directory of the project. The following will
 compile the application and run all unit tests:
@@ -31,7 +32,7 @@ Windows:
 ./gradlew.bat build
 ```
 
-# Thanks
+## Thanks
 
 App icon '[Music](https://thenounproject.com/term/music/886761/)' by Aleks from the Noun Project.
 
