@@ -1,0 +1,50 @@
+<resources
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">Sons - Sommeil de Bébé</string>
+    <string name="description">Sélectionnez le son et cliquez sur jouer</string>
+    <string name="sound">Son</string>
+    <string name="play">Jouer</string>
+    <string name="stop">Stop</string>
+    <string name="ok">OK</string>
+
+    <string name="sleepTimer">Minuterie</string>
+    <string name="disabled">Désactivée</string>
+    <string name="time_1minute">1 Minute</string>
+    <string name="time_5minute">5 Minutes</string>
+    <string name="time_10minute">10 Minutes</string>
+    <string name="time_30minute">30 Minutes</string>
+    <string name="time_1hour">1 Heure</string>
+    <string name="time_2hour">2 Heures</string>
+    <string name="time_4hour">4 Heures</string>
+    <string name="time_8hour">8 Heures</string>
+
+    <string name="dryer">Séchoir</string>
+    <string name="fan">Ventilateur</string>
+    <string name="ocean">Océan</string>
+    <string name="rain">Pluie</string>
+    <string name="refrigerator">Réfrigérateur</string>
+    <string name="shower">Douche</string>
+    <string name="stream">Ruisseau</string>
+    <string name="vacuum">Aspirateur</string>
+    <string name="water">Eau</string>
+    <string name="waterfall">Cascade</string>
+    <string name="waves">Vagues</string>
+    <string name="whiteNoise">Bruit blanc</string>
+
+    <string name="preparing">Préparation de&#8230;</string>
+    <string name="enableLowPassFilter">Activer le filtre passe-bas</string>
+    <string name="filterCutoff">Coupure du filtre : <xliff:g id="frequency">%d</xliff:g> Hz</string>
+    <string name="playbackNotSupported">La lecture en arrière plan est désormais prise en charge, voir le changelog pour plus de détails</string>
+    <string name="playbackFailure">Impossible de lire le fichier, voir les logs pour plus de détails</string>
+
+    <string name="about">À propos</string>
+    <string name="app_copyright_fmt">Copyright 2016-<xliff:g>%s</xliff:g> Branden Archer</string>
+    <string name="app_license">La licence est la GPLv3.</string>
+    <string name="about_title_fmt">À propos <xliff:g id="app_name">%s</xliff:g></string>
+    <string name="debug_version_fmt">Version : <xliff:g id="version">%s</xliff:g></string>
+    <string name="app_revision_fmt">Changements : <xliff:g id="app_revision_url">%s</xliff:g></string>
+    <string name="sound_resources"><xliff:g id="app_name">%s</xliff:g> utilise des ressources sonores de <xliff:g id="sound_sources_list">%s</xliff:g></string>
+    <string name="image_resources"><xliff:g id="app_name">%s</xliff:g> utilise des ressources sonores de <xliff:g id="sound_sources_list">%s</xliff:g></string>
+    <string name="app_libraries"><xliff:g id="app_name">%s</xliff:g> utilise les bibliothèques tierces ou les programmes suivants : <xliff:g id="app_libraries_list">%s</xliff:g></string>
+</resources>
