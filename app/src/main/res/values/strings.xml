@@ -37,6 +37,7 @@
     <string name="filterCutoff">Filter cutoff: <xliff:g id="frequency">%d</xliff:g> Hz</string>
     <string name="playbackNotSupported">Playback now supported, see logs for details</string>
     <string name="playbackFailure">Unable to play file, see logs for details</string>
+    <string name="sleepTimerUpdated">Updated sleep timer</string>
 
     <string name="about">About</string>
     <string name="app_copyright_fmt">Copyright 2016-<xliff:g>%d</xliff:g> Branden Archer</string>
