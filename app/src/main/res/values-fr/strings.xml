@@ -37,9 +37,10 @@
     <string name="filterCutoff">Coupure du filtre : <xliff:g id="frequency">%d</xliff:g> Hz</string>
     <string name="playbackNotSupported">La lecture en arrière plan est désormais prise en charge, voir le changelog pour plus de détails</string>
     <string name="playbackFailure">Impossible de lire le fichier, voir les logs pour plus de détails</string>
+    <!-- NEEDS TRANSLATED --><string name="sleepTimerUpdated">Updated sleep timer</string>
 
     <string name="about">À propos</string>
-    <string name="app_copyright_fmt">Copyright 2016-<xliff:g>%s</xliff:g> Branden Archer</string>
+    <string name="app_copyright_fmt">Copyright 2016-<xliff:g>%d</xliff:g> Branden Archer</string>
     <string name="app_license">La licence est la GPLv3.</string>
     <string name="about_title_fmt">À propos <xliff:g id="app_name">%s</xliff:g></string>
     <string name="debug_version_fmt">Version : <xliff:g id="version">%s</xliff:g></string>

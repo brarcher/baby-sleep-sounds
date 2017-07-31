@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -114,6 +115,24 @@ public class MainActivity extends AppCompatActivity
 
         final Spinner sleepTimeoutSpinner = (Spinner) findViewById(R.id.sleepTimerSpinner);
         List<String> times = new ArrayList<>(_timeMap.keySet());
+        sleepTimeoutSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                if(_mediaPlayer != null)
+                {
+                    updatePlayTimeout();
+                    Toast.makeText(MainActivity.this, R.string.sleepTimerUpdated, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                // noop
+            }
+        });
 
         ArrayAdapter<String> timesAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, times);
@@ -396,10 +415,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Update the UI to reflect it is playing
+     * Update the timeout for playback to stop
      */
-    private void updateToPlaying()
+    private void updatePlayTimeout()
     {
+        // Cancel the running timer
+        if(_timer != null)
+        {
+            _timer.cancel();
+            _timer.purge();
+        }
+
         final Spinner sleepTimeoutSpinner = (Spinner) findViewById(R.id.sleepTimerSpinner);
         String selectedTimeout = (String)sleepTimeoutSpinner.getSelectedItem();
         int timeoutMs = _timeMap.get(selectedTimeout);
@@ -415,12 +441,20 @@ public class MainActivity extends AppCompatActivity
                 }
             }, (long)timeoutMs);
         }
+    }
 
+    /**
+     * Update the UI to reflect it is playing
+     */
+    private void updateToPlaying()
+    {
         runOnUiThread(new Runnable()
         {
             @Override
             public void run()
             {
+                updatePlayTimeout();
+
                 final Button button = (Button) findViewById(R.id.button);
                 button.setText(R.string.stop);
 
@@ -459,8 +493,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setControlsEnabled(boolean enabled)
     {
-        for(int resId : new int[]{R.id.soundSpinner, R.id.sleepTimerSpinner,
-                R.id.enableFilter, R.id.filterFrequencyBar})
+        for(int resId : new int[]{R.id.soundSpinner, R.id.enableFilter, R.id.filterFrequencyBar})
         {
             final View view = findViewById(resId);
             view.setEnabled(enabled);
