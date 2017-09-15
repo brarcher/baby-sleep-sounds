@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
             .put(getResources().getString(R.string.ocean), R.raw.ocean)
             .put(getResources().getString(R.string.rain), R.raw.rain)
             .put(getResources().getString(R.string.refrigerator), R.raw.refrigerator)
+            .put(getResources().getString(R.string.shhhh), R.raw.shhhh)
             .put(getResources().getString(R.string.shower), R.raw.shower)
             .put(getResources().getString(R.string.stream), R.raw.stream)
             .put(getResources().getString(R.string.vacuum), R.raw.vacuum)
