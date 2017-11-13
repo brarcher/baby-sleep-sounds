@@ -461,8 +461,11 @@ public class MainActivity extends AppCompatActivity
 
                 setControlsEnabled(false);
 
-                _encodingProgress.hide();
-                _encodingProgress = null;
+                if(_encodingProgress != null)
+                {
+                    _encodingProgress.hide();
+                    _encodingProgress = null;
+                }
             }
         });
     }
