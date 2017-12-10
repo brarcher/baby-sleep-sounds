@@ -44,6 +44,8 @@ import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 
+import android.content.SharedPreferences;
+
 public class MainActivity extends AppCompatActivity
 {
     private final static String TAG = "BabySleepSounds";
@@ -62,9 +64,16 @@ public class MainActivity extends AppCompatActivity
     private SeekBar _filterCutoffFrequencySetting;
     private ProgressDialog _encodingProgress;
 
+    private CheckBox _useDarkTheme;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        final SharedPreferences pref = getApplicationContext().getSharedPreferences(TAG, MODE_PRIVATE);
+        if (pref.getBoolean("useDarkTheme",false)) {
+            setTheme(R.style.AppThemeDark_NoActionBar );
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -236,6 +245,20 @@ public class MainActivity extends AppCompatActivity
 
         // Set initial value
         updateFrequencyReadout(getFrequencyReadout());
+
+        _useDarkTheme = (CheckBox)findViewById(R.id.useDarkTheme);
+        _useDarkTheme.setChecked(pref.getBoolean("useDarkTheme",false));
+        _useDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean("useDarkTheme", isChecked);
+                editor.commit();
+                recreate(); //Apply theme change immediately
+            }
+        });
     }
 
     /**
@@ -497,7 +520,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setControlsEnabled(boolean enabled)
     {
-        for(int resId : new int[]{R.id.soundSpinner, R.id.enableFilter, R.id.filterFrequencyBar})
+        for(int resId : new int[]{R.id.soundSpinner, R.id.enableFilter, R.id.filterFrequencyBar, R.id.useDarkTheme})
         {
             final View view = findViewById(resId);
             view.setEnabled(enabled);
