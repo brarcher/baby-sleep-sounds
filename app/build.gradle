@@ -14,8 +14,8 @@ android {
         applicationId "protect.babysleepsounds"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 11
-        versionName "0.7"
+        versionCode 12
+        versionName "0.8"
     }
     buildTypes {
         release {
