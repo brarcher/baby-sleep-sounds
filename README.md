@@ -14,8 +14,9 @@ If there is any interest in improving this project, kindly submit a pull request
 
 ## Screenshot
 
-[<img src="https://cloud.githubusercontent.com/assets/5264535/23639172/16b26352-02b4-11e7-945b-fe87f1d9abd2.png" width=250>](https://cloud.githubusercontent.com/assets/5264535/23639172/16b26352-02b4-11e7-945b-fe87f1d9abd2.png)
-[<img src="https://cloud.githubusercontent.com/assets/5264535/23639173/17c710d0-02b4-11e7-8030-85b0cedab112.png" width=250>](https://cloud.githubusercontent.com/assets/5264535/23639173/17c710d0-02b4-11e7-8030-85b0cedab112.png)
+[<img src="https://user-images.githubusercontent.com/5264535/33806211-8cdd6fa4-dd92-11e7-9f2e-61d382519b3f.png" width=250>](https://user-images.githubusercontent.com/5264535/33806211-8cdd6fa4-dd92-11e7-9f2e-61d382519b3f.png)
+[<img src="https://user-images.githubusercontent.com/5264535/33806212-8da8dfcc-dd92-11e7-8ab0-c2ea780f7939.png" width=250>](https://user-images.githubusercontent.com/5264535/33806212-8da8dfcc-dd92-11e7-8ab0-c2ea780f7939.png)
+[<img src="https://user-images.githubusercontent.com/5264535/33806213-8ebbef94-dd92-11e7-8360-bd10b91b6ab4.png" width=250>](https://user-images.githubusercontent.com/5264535/33806213-8ebbef94-dd92-11e7-8360-bd10b91b6ab4.png)
 
 ## Building
 
