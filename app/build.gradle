@@ -7,12 +7,11 @@ findbugs {
 }
 
 android {
-    compileSdkVersion 23
-
+    compileSdkVersion 27
     defaultConfig {
         applicationId "protect.babysleepsounds"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode 12
         versionName "0.8"
     }
@@ -39,8 +38,8 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:design:27.0.2'
     compile 'com.google.guava:guava:18.0'
     compile 'com.writingminds:FFmpegAndroid:0.3.2'
 }
