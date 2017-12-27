@@ -1,11 +1,15 @@
 package protect.babysleepsounds;
 
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -66,6 +70,10 @@ public class MainActivity extends AppCompatActivity
 
     private CheckBox _useDarkTheme;
 
+    private NotificationManagerCompat _notificationManager;
+    private static final int NOTIFICATION_ID = 1;
+    private static final String NOTIFICATION_CHANNEL_ID = protect.babysleepsounds.MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -78,6 +86,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Gets an instance of the NotificationManager service
+        _notificationManager = NotificationManagerCompat.from(this);
+        _notificationManager.cancelAll();
 
         // These sound files by convention are:
         // - take a ~10 second clip
@@ -467,6 +479,31 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void setNotification()
+    {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(MainActivity.this)
+                        .setOngoing(true)
+                        .setSmallIcon(R.drawable.playing_notification)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(getString(R.string.notificationPlaying));
+
+        // Creates an explicit intent for the Activity
+        Intent resultIntent = new Intent(this, MainActivity.class);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
+                resultIntent, 0);
+        builder.setContentIntent(resultPendingIntent);
+
+        _notificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
+
+    private void clearNotification()
+    {
+        Log.d(TAG, "Clearing notification");
+        _notificationManager.cancel(NOTIFICATION_ID);
+    }
+
     /**
      * Update the UI to reflect it is playing
      */
@@ -489,6 +526,8 @@ public class MainActivity extends AppCompatActivity
                     _encodingProgress.hide();
                     _encodingProgress = null;
                 }
+
+                setNotification();
             }
         });
     }
@@ -514,6 +553,8 @@ public class MainActivity extends AppCompatActivity
                 button.setText(R.string.play);
 
                 setControlsEnabled(true);
+
+                clearNotification();
             }
         });
     }
@@ -544,6 +585,8 @@ public class MainActivity extends AppCompatActivity
                 Log.w(TAG, "Failed to delete file on exit: " + file.getAbsolutePath());
             }
         }
+
+        clearNotification();
 
         super.onDestroy();
     }
