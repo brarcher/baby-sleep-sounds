@@ -26,3 +26,9 @@
 -dontwarn javax.annotation.*
 -dontwarn javax.annotation.concurrent.*
 -dontwarn sun.misc.Unsafe
+
+# Keep R inner classes, so WebView can find app icon via reflection:
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
+-keep class **.R$*
