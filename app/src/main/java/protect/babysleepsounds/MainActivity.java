@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity
         //   which should create a seamless track appropriate for looping
         // - Save as a mp3 file, 128kbps, stereo
         _soundMap = ImmutableMap.<String, Integer>builder()
+            .put(getResources().getString(R.string.campfire), R.raw.campfire)
             .put(getResources().getString(R.string.dryer), R.raw.dryer)
             .put(getResources().getString(R.string.fan), R.raw.fan)
             .put(getResources().getString(R.string.ocean), R.raw.ocean)
@@ -623,7 +624,8 @@ public class MainActivity extends AppCompatActivity
         final Map<String, String> SOUND_RESOURCES = ImmutableMap.of
         (
             "Canton Becker", "http://whitenoise.cantonbecker.com/",
-            "The MC2 Method", "http://mc2method.org/white-noise/"
+            "The MC2 Method", "http://mc2method.org/white-noise/",
+            "Campfire-1.mp3 Copyright SoundJay.com Used with Permission", "https://www.soundjay.com/nature/campfire-1.mp3"
         );
 
         final Map<String, String> IMAGE_RESOURCES = ImmutableMap.of

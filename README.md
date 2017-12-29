@@ -58,3 +58,5 @@ and are distributed under the condition of "Personal Use":
   - water.mp3
   - waterfall.mp3
   - waves.mp3
+
+[Campfire-1.mp3](https://www.soundjay.com/nature/campfire-1.mp3) Copyright SoundJay.com Used with Permission.
