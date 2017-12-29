@@ -36,10 +36,10 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    compile 'com.android.support:design:27.0.2'
-    compile 'com.google.guava:guava:18.0'
-    compile 'com.writingminds:FFmpegAndroid:0.3.2'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.google.guava:guava:18.0'
+    implementation 'com.writingminds:FFmpegAndroid:0.3.2'
 }
 
 task findbugs(type: FindBugs, dependsOn: 'assembleDebug') {
