@@ -19,6 +19,7 @@
     <string name="time_4hour">4 Hours</string>
     <string name="time_8hour">8 Hours</string>
 
+    <string name="campfire">Campfire</string>
     <string name="dryer">Dryer</string>
     <string name="fan">Fan</string>
     <string name="ocean">Ocean</string>
