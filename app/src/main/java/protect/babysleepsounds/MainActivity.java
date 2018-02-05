@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // These sound files by convention are:
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity
                 .put(getResources().getString(R.string.time_8hour), 1000*60*60*8)
                 .build();
 
-        final Spinner soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
+        final Spinner soundSpinner = findViewById(R.id.soundSpinner);
 
         List<String> names = new ArrayList<>(_soundMap.keySet());
 
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity
         soundSpinner.setAdapter(dataAdapter);
 
 
-        final Spinner sleepTimeoutSpinner = (Spinner) findViewById(R.id.sleepTimerSpinner);
+        final Spinner sleepTimeoutSpinner = findViewById(R.id.sleepTimerSpinner);
         List<String> times = new ArrayList<>(_timeMap.keySet());
         sleepTimeoutSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        final Button button = (Button) findViewById(R.id.button);
+        final Button button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity
 
         final View filterFrequencyReadout = findViewById(R.id.filterFrequencyReadout);
         final View filterFrequencyLayout = findViewById(R.id.filterFrequencyLayout);
-        _enableFilterSetting = (CheckBox)findViewById(R.id.enableFilter);
+        _enableFilterSetting = findViewById(R.id.enableFilter);
         _enableFilterSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             @Override
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        _filterCutoffFrequencySetting = (SeekBar)findViewById(R.id.filterFrequencyBar);
+        _filterCutoffFrequencySetting = findViewById(R.id.filterFrequencyBar);
         _filterCutoffFrequencySetting.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity
         // Set initial value
         updateFrequencyReadout(getFrequencyReadout());
 
-        _useDarkTheme = (CheckBox)findViewById(R.id.useDarkTheme);
+        _useDarkTheme = findViewById(R.id.useDarkTheme);
         _useDarkTheme.setChecked(pref.getBoolean("useDarkTheme",false));
         _useDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void updateFrequencyReadout(int frequency)
     {
-        final TextView filterFrequency = (TextView) findViewById(R.id.filterFrequencyText);
+        final TextView filterFrequency = findViewById(R.id.filterFrequencyText);
         String readout = String.format(getString(R.string.filterCutoff), frequency);
         filterFrequency.setText(readout);
     }
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity
 
     private void startPlayback()
     {
-        final Spinner soundSpinner = (Spinner) findViewById(R.id.soundSpinner);
+        final Spinner soundSpinner = findViewById(R.id.soundSpinner);
         String selectedSound = (String)soundSpinner.getSelectedItem();
         int id = _soundMap.get(selectedSound);
 
@@ -454,7 +454,7 @@ public class MainActivity extends AppCompatActivity
             _timer.purge();
         }
 
-        final Spinner sleepTimeoutSpinner = (Spinner) findViewById(R.id.sleepTimerSpinner);
+        final Spinner sleepTimeoutSpinner = findViewById(R.id.sleepTimerSpinner);
         String selectedTimeout = (String)sleepTimeoutSpinner.getSelectedItem();
         int timeoutMs = _timeMap.get(selectedTimeout);
         if(timeoutMs > 0)
@@ -485,7 +485,7 @@ public class MainActivity extends AppCompatActivity
             {
                 updatePlayTimeout();
 
-                final Button button = (Button) findViewById(R.id.button);
+                final Button button = findViewById(R.id.button);
                 button.setText(R.string.stop);
 
                 setControlsEnabled(false);
@@ -518,7 +518,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run()
             {
-                final Button button = (Button) findViewById(R.id.button);
+                final Button button = findViewById(R.id.button);
                 button.setText(R.string.play);
 
                 setControlsEnabled(true);
