@@ -1,6 +1,5 @@
 package protect.babysleepsounds;
 
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,8 +7,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -60,7 +57,7 @@ public class MainActivity extends AppCompatActivity
     private Map<String, Integer> _soundMap;
     private Map<String, Integer> _timeMap;
 
-    private LoopingAudioPlayer _mediaPlayer;
+    private boolean _playing = false;
     private Timer _timer;
 
     private FFmpeg _ffmpeg;
@@ -69,10 +66,6 @@ public class MainActivity extends AppCompatActivity
     private ProgressDialog _encodingProgress;
 
     private CheckBox _useDarkTheme;
-
-    private NotificationManagerCompat _notificationManager;
-    private static final int NOTIFICATION_ID = 1;
-    private static final String NOTIFICATION_CHANNEL_ID = protect.babysleepsounds.MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -86,10 +79,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // Gets an instance of the NotificationManager service
-        _notificationManager = NotificationManagerCompat.from(this);
-        _notificationManager.cancelAll();
 
         // These sound files by convention are:
         // - take a ~10 second clip
@@ -143,7 +132,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                if(_mediaPlayer != null)
+                if(_playing)
                 {
                     updatePlayTimeout();
                     Toast.makeText(MainActivity.this, R.string.sleepTimerUpdated, Toast.LENGTH_LONG).show();
@@ -170,7 +159,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                if(_mediaPlayer == null)
+                if(_playing == false)
                 {
                     startPlayback();
                 }
@@ -367,8 +356,10 @@ public class MainActivity extends AppCompatActivity
                 {
                     Log.d(TAG, "ffmpeg execute onSuccess(): " + message);
 
-                    _mediaPlayer = new LoopingAudioPlayer(MainActivity.this, processed);
-                    _mediaPlayer.start();
+                    Intent startIntent = new Intent(MainActivity.this, AudioService.class);
+                    startIntent.putExtra(AudioService.AUDIO_FILENAME_ARG, processed.getAbsolutePath());
+                    startService(startIntent);
+
                     updateToPlaying();
                 }
 
@@ -480,36 +471,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void setNotification()
-    {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(MainActivity.this)
-                        .setOngoing(true)
-                        .setSmallIcon(R.drawable.playing_notification)
-                        .setContentTitle(getString(R.string.app_name))
-                        .setContentText(getString(R.string.notificationPlaying));
-
-        // Creates an explicit intent for the Activity
-        Intent resultIntent = new Intent(this, MainActivity.class);
-
-        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
-                resultIntent, 0);
-        builder.setContentIntent(resultPendingIntent);
-
-        _notificationManager.notify(NOTIFICATION_ID, builder.build());
-    }
-
-    private void clearNotification()
-    {
-        Log.d(TAG, "Clearing notification");
-        _notificationManager.cancel(NOTIFICATION_ID);
-    }
-
     /**
      * Update the UI to reflect it is playing
      */
     private void updateToPlaying()
     {
+        _playing = true;
+
         runOnUiThread(new Runnable()
         {
             @Override
@@ -527,16 +495,16 @@ public class MainActivity extends AppCompatActivity
                     _encodingProgress.hide();
                     _encodingProgress = null;
                 }
-
-                setNotification();
             }
         });
     }
 
     private void stopPlayback()
     {
-        _mediaPlayer.stop();
-        _mediaPlayer = null;
+        Intent stopIntent = new Intent(MainActivity.this, AudioService.class);
+        startService(stopIntent);
+
+        _playing = false;
 
         if(_timer != null)
         {
@@ -554,8 +522,6 @@ public class MainActivity extends AppCompatActivity
                 button.setText(R.string.play);
 
                 setControlsEnabled(true);
-
-                clearNotification();
             }
         });
     }
@@ -572,9 +538,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy()
     {
-        if(_mediaPlayer != null)
+        if(_playing)
         {
-            _mediaPlayer.stop();
+            stopPlayback();
         }
 
         for(String toDelete : new String[]{ORIGINAL_MP3_FILE, PROCESSED_RAW_FILE})
@@ -586,8 +552,6 @@ public class MainActivity extends AppCompatActivity
                 Log.w(TAG, "Failed to delete file on exit: " + file.getAbsolutePath());
             }
         }
-
-        clearNotification();
 
         super.onDestroy();
     }
