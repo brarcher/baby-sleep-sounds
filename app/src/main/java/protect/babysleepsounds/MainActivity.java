@@ -25,7 +25,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.TextView;
 
-import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
 import com.google.common.collect.ImmutableMap;
 
 import java.io.File;
@@ -40,12 +39,11 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
-import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
-
 import android.content.SharedPreferences;
+
+import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler;
+import nl.bravobit.ffmpeg.FFmpeg;
+import nl.bravobit.ffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -172,41 +170,14 @@ public class MainActivity extends AppCompatActivity
 
         _ffmpeg = FFmpeg.getInstance(this);
 
-        try
+
+        if(_ffmpeg.isSupported())
         {
-            _ffmpeg.loadBinary(new LoadBinaryResponseHandler()
-            {
-
-                @Override
-                public void onStart()
-                {
-                    Log.d(TAG, "ffmpeg.loadBinary onStart()");
-                }
-
-                @Override
-                public void onFailure()
-                {
-                    Log.d(TAG, "ffmpeg.loadBinary onFailure()");
-                    reportPlaybackUnsupported();
-                }
-
-                @Override
-                public void onSuccess()
-                {
-                    Log.d(TAG, "ffmpeg.loadBinary onSuccess()");
-                    button.setEnabled(true);
-                }
-
-                @Override
-                public void onFinish()
-                {
-                    Log.d(TAG, "ffmpeg.loadBinary onFinish()");
-                }
-            });
+            button.setEnabled(true);
         }
-        catch (FFmpegNotSupportedException e)
+        else
         {
-            Log.d(TAG, "ffmpeg not supported", e);
+            Log.d(TAG, "ffmpeg not supported");
             reportPlaybackUnsupported();
         }
 
@@ -345,7 +316,7 @@ public class MainActivity extends AppCompatActivity
 
             Log.i(TAG, "Launching ffmpeg");
             String[] cmd = arguments.toArray(new String[arguments.size()]);
-            _ffmpeg.execute(cmd, new FFmpegExecuteResponseHandler()
+            _ffmpeg.execute(cmd, new ExecuteBinaryResponseHandler()
             {
                 public void onStart()
                 {
