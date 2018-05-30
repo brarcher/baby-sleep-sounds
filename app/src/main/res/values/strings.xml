@@ -45,6 +45,8 @@
 
     <string name="notificationPlaying">Playing&#8230;</string>
 
+    <string name="notificationChannelName">Baby Sleep Sounds Audio Service</string>
+
     <string name="about">About</string>
     <string name="app_copyright_fmt">Copyright 2016-<xliff:g>%d</xliff:g> Branden Archer</string>
     <string name="app_license">Licensed under the GPLv3.</string>
