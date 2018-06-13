@@ -1,0 +1,59 @@
+<resources
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">Baby-slaapgeluiden</string>
+    <string name="description">Selecteer een geluid en druk op Afspelen</string>
+    <string name="sound">Geluid</string>
+    <string name="play">Afspelen</string>
+    <string name="stop">Stoppen</string>
+    <string name="ok">Oké</string>
+
+    <string name="sleepTimer">Slaaptimer</string>
+    <string name="disabled">Uitgeschakeld</string>
+    <string name="time_1minute">1 minuut</string>
+    <string name="time_5minute">5 minuten</string>
+    <string name="time_10minute">10 minuten</string>
+    <string name="time_30minute">30 minuten</string>
+    <string name="time_1hour">1 uur</string>
+    <string name="time_2hour">2 uur</string>
+    <string name="time_4hour">4 uur</string>
+    <string name="time_8hour">8 uur</string>
+
+    <string name="campfire">Kampvuur</string>
+    <string name="dryer">Wasdroger</string>
+    <string name="fan">Ventilator</string>
+    <string name="ocean">Oceaan</string>
+    <string name="rain">Regen</string>
+    <string name="refrigerator">Koelkast</string>
+    <string name="shhhh">Shhhh</string>
+    <string name="shower">Douche</string>
+    <string name="stream">Beek</string>
+    <string name="vacuum">Stofzuiger</string>
+    <string name="water">Water</string>
+    <string name="waterfall">Waterval</string>
+    <string name="waves">Golven</string>
+    <string name="whiteNoise">Witte ruis</string>
+
+    <string name="preparing">Bezig met voorbereiden&#8230;...</string>
+    <string name="enableLowPassFilter">Lage geluiden-filter inschakelen</string>
+    <string name="filterCutoff">Filteren op: <xliff:g id="frequency">%d</xliff:g> Hz</string>
+    <string name="playbackNotSupported">Het afspelen is niet mogelijk. Bekijk de logbestanden voor meer informatie.</string>
+    <string name="playbackFailure">Het bestand kan niet worden afgespeeld. Bekijk de logbestanden voor meer informatie.</string>
+    <string name="sleepTimerUpdated">De slaaptimer is bijgewerkt</string>
+
+    <string name="theme">Donker thema gebruiken</string>
+
+    <string name="notificationPlaying">Bezig met afspelen&#8230;...</string>
+
+    <string name="notificationChannelName">Baby-slaapgeluiden - audiodienst</string>
+
+    <string name="about">Over</string>
+    <string name="app_copyright_fmt">Copyright 2016-<xliff:g>%d</xliff:g> Branden Archer</string>
+    <string name="app_license">Uitgebracht onder de GPLv3-licentie.</string>
+    <string name="about_title_fmt">Over <xliff:g id="app_name">%s</xliff:g></string>
+    <string name="debug_version_fmt">Versie: <xliff:g id="version">%s</xliff:g></string>
+    <string name="app_revision_fmt">Versie-informatie: <xliff:g id="app_revision_url">%s</xliff:g></string>
+    <string name="sound_resources"><xliff:g id="app_name">%s</xliff:g> gebruikt geluiden van: <xliff:g id="sound_sources_list">%s</xliff:g></string>
+    <string name="image_resources"><xliff:g id="app_name">%s</xliff:g> gebruikt afbeeldingen van: <xliff:g id="sound_sources_list">%s</xliff:g></string>
+    <string name="app_libraries"><xliff:g id="app_name">%s</xliff:g> gebruikt de volgende bibliotheken of programma\'s van derde partijen: <xliff:g id="app_libraries_list">%s</xliff:g></string>
+</resources>
