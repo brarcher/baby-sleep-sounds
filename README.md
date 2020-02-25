@@ -10,8 +10,6 @@ Play select sounds to help a baby sleep
 
 This application includes several audio files which when selected will play in a loop until stopped.
 
-If there is any interest in improving this project, kindly submit a pull request with proposed changed.
-
 ## Screenshot
 
 [<img src="https://user-images.githubusercontent.com/5264535/33806211-8cdd6fa4-dd92-11e7-9f2e-61d382519b3f.png" width=250>](https://user-images.githubusercontent.com/5264535/33806211-8cdd6fa4-dd92-11e7-9f2e-61d382519b3f.png)
@@ -60,3 +58,6 @@ and are distributed under the condition of "Personal Use":
   - waves.mp3
 
 [Campfire-1.mp3](https://www.soundjay.com/nature/campfire-1.mp3) Copyright SoundJay.com Used with Permission.
+
+# Note from Developer
+The developer is currently on hiatus from the project. Questions and pull requests may not be looked at for some time. Apologies in advance.
