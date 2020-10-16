@@ -3,6 +3,7 @@
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:required="true" android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:required="true" android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:allowBackup="false"
