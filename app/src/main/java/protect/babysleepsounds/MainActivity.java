@@ -181,9 +181,17 @@ public class MainActivity extends AppCompatActivity
             reportPlaybackUnsupported();
         }
 
+        final Preferences preferences = Preferences.get(this);
+
         final View filterFrequencyReadout = findViewById(R.id.filterFrequencyReadout);
         final View filterFrequencyLayout = findViewById(R.id.filterFrequencyLayout);
+
+        int filterVisibility = preferences.isLowPassFilterEnabled() ? View.VISIBLE : View.GONE;
+        filterFrequencyReadout.setVisibility(filterVisibility);
+        filterFrequencyLayout.setVisibility(filterVisibility);
+
         _enableFilterSetting = findViewById(R.id.enableFilter);
+        _enableFilterSetting.setChecked(preferences.isLowPassFilterEnabled());
         _enableFilterSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             @Override
@@ -191,10 +199,12 @@ public class MainActivity extends AppCompatActivity
             {
                 filterFrequencyLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
                 filterFrequencyReadout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                preferences.setLowPassFilterEnabled(isChecked);
             }
         });
 
         _filterCutoffFrequencySetting = findViewById(R.id.filterFrequencyBar);
+        _filterCutoffFrequencySetting.setProgress(toFrequencyReadout(preferences.getLowPassFilterFrequency()));
         _filterCutoffFrequencySetting.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
@@ -248,7 +258,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Update the TextView containing the frequency to the given value
+     * Opposite of {@link MainActivity#getFrequencyReadout()}. Used when we have a
+     * frequency value that we use to populate the frequency bar.
+     * @return
+     */
+    private int toFrequencyReadout(int frequency) {
+        return frequency - 200;
+    }
+
+    /**
+     * Update the TextView containing the frequency to the given value and remember the
+     * value in our preferences.
      * @param frequency value to update the field with
      */
     private void updateFrequencyReadout(int frequency)
@@ -256,6 +276,8 @@ public class MainActivity extends AppCompatActivity
         final TextView filterFrequency = findViewById(R.id.filterFrequencyText);
         String readout = String.format(getString(R.string.filterCutoff), frequency);
         filterFrequency.setText(readout);
+
+        Preferences.get(this).setLowPassFilterFrequency(frequency);
     }
 
     /**
