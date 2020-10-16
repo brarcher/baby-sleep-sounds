@@ -1,9 +1,7 @@
-apply plugin: 'com.android.application'
-apply plugin: 'findbugs'
-
-findbugs {
-    sourceSets = []
-    ignoreFailures = false
+// https://docs.gradle.org/current/userguide/upgrading_version_5.html#the_findbugs_plugin_has_been_removedhttps://docs.gradle.org/current/userguide/upgrading_version_5.html#the_findbugs_plugin_has_been_removed
+plugins {
+    id "com.github.spotbugs" version "4.5.1"
+    id "com.android.application"
 }
 
 android {
@@ -42,18 +40,17 @@ dependencies {
     implementation 'protect:android-ffmpeg:release@aar'
 }
 
-task findbugs(type: FindBugs, dependsOn: 'assembleDebug') {
-
-    description 'Run findbugs'
-    group 'verification'
-
-    classes = fileTree('build/intermediates/classes/debug/')
-    source = fileTree('src/main/java')
-    classpath = files()
-
+spotbugs {
     effort = 'max'
+    reportLevel = 'high'
+    ignoreFailures = false
 
     excludeFilter = file("./config/findbugs/exclude.xml")
+}
+
+project.tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
+    group 'Verification'
+    description 'Run Spotbugs on this project.'
 
     reports {
         xml.enabled = false
