@@ -42,7 +42,7 @@
     <string name="playbackFailure">Het bestand kan niet worden afgespeeld. Bekijk de logbestanden voor meer informatie.</string>
     <string name="sleepTimerUpdated">De slaaptimer is bijgewerkt</string>
 
-    <string name="theme">Donker thema gebruiken</string>
+    <string name="theme">Thema</string>
 
     <string name="notificationPlaying">Bezig met afspelen&#8230;...</string>
 
