@@ -4,6 +4,13 @@
 
     <PreferenceCategory android:title="@string/customize">
 
+        <ListPreference
+            android:key="theme"
+            android:title="@string/theme"
+            android:defaultValue="light"
+            android:entries="@array/theme_labels"
+            android:entryValues="@array/theme_values"/>
+
         <SwitchPreferenceCompat
             android:key="filter_enabled"
             android:title="@string/enableLowPassFilter" />

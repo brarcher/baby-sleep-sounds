@@ -1,35 +1,28 @@
 package protect.babysleepsounds;
 
-import android.content.DialogInterface;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.webkit.WebView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SeekBarPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.google.common.collect.ImmutableMap;
-
-import java.util.Calendar;
-import java.util.Map;
-
 public class SettingsActivity extends AppCompatActivity {
-
-    private static final String TAG = "SettingsActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Preferences.get(this).applyTheme(this);
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_settings);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportFragmentManager().beginTransaction().replace(R.id.settings_wrapper, new Fragment()).commit();
     }
@@ -37,13 +30,13 @@ public class SettingsActivity extends AppCompatActivity {
     public static class Fragment extends PreferenceFragmentCompat {
 
         private SeekBarPreference filterCutoff;
+        private ListPreference theme;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.preferences);
 
             filterCutoff = findPreference("filter_cutoff");
-
             filterCutoff.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -62,8 +55,23 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
+            theme = findPreference("theme");
+            theme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    getActivity().recreate();
+                    return true;
+                }
+            });
+
             toggleCutoff(filterEnabled.isChecked());
             updateCutoffSummary(filterCutoff.getValue());
+            updateThemeSummary();
+        }
+
+        private void updateThemeSummary() {
+            ListPreference preference = findPreference("theme");
+            theme.setSummary(preference.getEntry());
         }
 
         private void updateCutoffSummary(int value) {
