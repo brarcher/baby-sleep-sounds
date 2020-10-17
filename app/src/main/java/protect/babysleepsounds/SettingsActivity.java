@@ -15,8 +15,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Preferences.get(this).applyTheme(this);
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_settings);
@@ -59,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
             theme.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    getActivity().recreate();
+                    Preferences.get(getActivity()).applyTheme((String) newValue);
                     return true;
                 }
             });
@@ -70,8 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         private void updateThemeSummary() {
-            ListPreference preference = findPreference("theme");
-            theme.setSummary(preference.getEntry());
+            theme.setSummary(theme.getEntry());
         }
 
         private void updateCutoffSummary(int value) {

@@ -35,8 +35,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.content.SharedPreferences;
-
 import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler;
 import nl.bravobit.ffmpeg.FFmpeg;
 import nl.bravobit.ffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
@@ -57,14 +55,10 @@ public class MainActivity extends AppCompatActivity
     private FFmpeg _ffmpeg;
     private ProgressDialog _encodingProgress;
 
-    private String _theme = Preferences.THEME_LIGHT;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Preferences preferences = Preferences.get(this);
-        _theme = preferences.getTheme();
-        preferences.applyTheme(this);
+        Preferences.get(this).applyTheme();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -174,19 +168,6 @@ public class MainActivity extends AppCompatActivity
             reportPlaybackUnsupported();
         }
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Preferences preferences = Preferences.get(this);
-        String newTheme = preferences.getTheme();
-        if (!_theme.equals(newTheme)) {
-            _theme = newTheme;
-            preferences.applyTheme(this);
-            recreate();
-        }
     }
 
     /**

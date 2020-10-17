@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 public class Preferences {
 
     private static final String LOW_PASS_FILTER_ENABLED = "filter_enabled";
@@ -42,11 +44,26 @@ public class Preferences {
         return preferences.getString(THEME, THEME_LIGHT);
     }
 
-    public void applyTheme(Activity activity) {
-        if (THEME_DARK.equals(getTheme())) {
-            activity.setTheme(R.style.AppThemeDark_NoActionBar);
-        } else {
-            activity.setTheme(R.style.AppTheme_NoActionBar);
+    public void applyTheme() {
+        applyTheme(getTheme());
+    }
+
+    public void applyTheme(String theme) {
+        int dayNightMode;
+        switch (theme) {
+            case THEME_LIGHT:
+                dayNightMode = AppCompatDelegate.MODE_NIGHT_NO;
+                break;
+
+            case THEME_DARK:
+                dayNightMode = AppCompatDelegate.MODE_NIGHT_YES;
+                break;
+
+            default:
+                dayNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+                break;
         }
+
+        AppCompatDelegate.setDefaultNightMode(dayNightMode);
     }
 }
