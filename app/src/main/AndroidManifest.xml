@@ -26,6 +26,7 @@
         <service
             android:name=".AudioService" >
         </service>
+        <activity android:name=".SettingsActivity" android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

@@ -6,8 +6,8 @@ import android.preference.PreferenceManager;
 
 public class Preferences {
 
-    private static final String LOW_PASS_FILTER_ENABLED = "lowPassFilterEnabled";
-    private static final String LOW_PASS_FILTER_FREQUENCY = "lowPassFilterFrequency";
+    private static final String LOW_PASS_FILTER_ENABLED = "filter_enabled";
+    private static final String LOW_PASS_FILTER_FREQUENCY = "filter_value";
 
     private static Preferences instance;
 
@@ -25,20 +25,8 @@ public class Preferences {
         return instance;
     }
 
-    public void setLowPassFilterEnabled(boolean enabled) {
-        preferences.edit()
-                .putBoolean(LOW_PASS_FILTER_ENABLED, enabled)
-                .apply();
-    }
-
     public boolean isLowPassFilterEnabled() {
         return preferences.getBoolean(LOW_PASS_FILTER_ENABLED, false);
-    }
-
-    public void setLowPassFilterFrequency(int frequency) {
-        preferences.edit()
-                .putInt(LOW_PASS_FILTER_FREQUENCY, frequency)
-                .apply();
     }
 
     public int getLowPassFilterFrequency() {

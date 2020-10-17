@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity
     private Timer _timer;
 
     private FFmpeg _ffmpeg;
-    private CheckBox _enableFilterSetting;
-    private SeekBar _filterCutoffFrequencySetting;
     private ProgressDialog _encodingProgress;
 
     private CheckBox _useDarkTheme;
@@ -183,52 +181,6 @@ public class MainActivity extends AppCompatActivity
 
         final Preferences preferences = Preferences.get(this);
 
-        final View filterFrequencyReadout = findViewById(R.id.filterFrequencyReadout);
-        final View filterFrequencyLayout = findViewById(R.id.filterFrequencyLayout);
-
-        int filterVisibility = preferences.isLowPassFilterEnabled() ? View.VISIBLE : View.GONE;
-        filterFrequencyReadout.setVisibility(filterVisibility);
-        filterFrequencyLayout.setVisibility(filterVisibility);
-
-        _enableFilterSetting = findViewById(R.id.enableFilter);
-        _enableFilterSetting.setChecked(preferences.isLowPassFilterEnabled());
-        _enableFilterSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                filterFrequencyLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                filterFrequencyReadout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                preferences.setLowPassFilterEnabled(isChecked);
-            }
-        });
-
-        _filterCutoffFrequencySetting = findViewById(R.id.filterFrequencyBar);
-        _filterCutoffFrequencySetting.setProgress(toFrequencyReadout(preferences.getLowPassFilterFrequency()));
-        _filterCutoffFrequencySetting.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-        {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-            {
-                updateFrequencyReadout(getFrequencyReadout());
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar)
-            {
-                // Nothing to do
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar)
-            {
-                // Nothing to do
-            }
-        });
-
-        // Set initial value
-        updateFrequencyReadout(getFrequencyReadout());
-
         _useDarkTheme = findViewById(R.id.useDarkTheme);
         _useDarkTheme.setChecked(pref.getBoolean("useDarkTheme",false));
         _useDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
@@ -242,42 +194,6 @@ public class MainActivity extends AppCompatActivity
                 recreate(); //Apply theme change immediately
             }
         });
-    }
-
-    /**
-     * Retrieve the value of the frequency readout, accounting for any
-     * offset or adjustments
-     */
-    private int getFrequencyReadout()
-    {
-        int rawValue = _filterCutoffFrequencySetting.getProgress();
-        // The data represented by the frequency bar starts at 200, so we need to add
-        // this offset to the value, as the bar's value always starts at 0.
-        int actualValue = 200 + rawValue;
-        return actualValue;
-    }
-
-    /**
-     * Opposite of {@link MainActivity#getFrequencyReadout()}. Used when we have a
-     * frequency value that we use to populate the frequency bar.
-     * @return
-     */
-    private int toFrequencyReadout(int frequency) {
-        return frequency - 200;
-    }
-
-    /**
-     * Update the TextView containing the frequency to the given value and remember the
-     * value in our preferences.
-     * @param frequency value to update the field with
-     */
-    private void updateFrequencyReadout(int frequency)
-    {
-        final TextView filterFrequency = findViewById(R.id.filterFrequencyText);
-        String readout = String.format(getString(R.string.filterCutoff), frequency);
-        filterFrequency.setText(readout);
-
-        Preferences.get(this).setLowPassFilterFrequency(frequency);
     }
 
     /**
@@ -318,9 +234,9 @@ public class MainActivity extends AppCompatActivity
             LinkedList<String> arguments = new LinkedList<>();
             arguments.add("-i");
             arguments.add(originalFile.getAbsolutePath());
-            if(_enableFilterSetting.isChecked())
+            if(Preferences.get(this).isLowPassFilterEnabled())
             {
-                int frequencyValue = getFrequencyReadout();
+                int frequencyValue = Preferences.get(this).getLowPassFilterFrequency();
 
                 Log.i(TAG, "Will perform lowpass filter to " + frequencyValue + " Hz");
                 arguments.add("-af");
@@ -521,7 +437,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setControlsEnabled(boolean enabled)
     {
-        for(int resId : new int[]{R.id.soundSpinner, R.id.enableFilter, R.id.filterFrequencyBar, R.id.useDarkTheme})
+        for(int resId : new int[]{R.id.soundSpinner, R.id.useDarkTheme})
         {
             final View view = findViewById(resId);
             view.setEnabled(enabled);
@@ -561,7 +477,12 @@ public class MainActivity extends AppCompatActivity
     {
         int id = item.getItemId();
 
-        if(id == R.id.action_about)
+        if(id == R.id.action_settings)
+        {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        else if (id == R.id.action_about)
         {
             displayAboutDialog();
             return true;
