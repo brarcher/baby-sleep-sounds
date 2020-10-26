@@ -18,7 +18,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Build
-      run: ./gradlew assembleRelease
+      run: ./gradlew assembleRelease --stacktrace
     - name: Check lint
       run: ./gradlew lintRelease
     - name: Run unit tests
