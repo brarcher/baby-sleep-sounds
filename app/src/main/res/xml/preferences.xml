@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/customize">
+
+        <ListPreference
+            android:key="theme"
+            android:title="@string/theme"
+            android:defaultValue="light"
+            android:entries="@array/theme_labels"
+            android:entryValues="@array/theme_values"/>
+
+        <SwitchPreferenceCompat
+            android:key="filter_enabled"
+            android:title="@string/enableLowPassFilter" />
+
+        <SeekBarPreference
+            android:key="filter_cutoff"
+            android:max="5000"
+            android:title="@string/filterCutoff"
+            app:min="200"
+            app:updatesContinuously="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

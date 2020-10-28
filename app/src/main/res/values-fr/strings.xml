@@ -33,8 +33,9 @@
     <string name="whiteNoise">Bruit blanc</string>
 
     <string name="preparing">Préparation de&#8230;</string>
-    <string name="enableLowPassFilter">Activer le filtre passe-bas</string>
-    <string name="filterCutoff">Coupure du filtre : <xliff:g id="frequency">%d</xliff:g> Hz</string>
+    <string name="enableLowPassFilter">filtre passe-bas</string>
+    <string name="filterCutoff">Coupure du filtre</string>
+    <string name="filterCutoffValue"><xliff:g id="frequency">%d</xliff:g> Hz</string>
     <string name="playbackNotSupported">La lecture en arrière plan est désormais prise en charge, voir le changelog pour plus de détails</string>
     <string name="playbackFailure">Impossible de lire le fichier, voir les logs pour plus de détails</string>
     <string name="sleepTimerUpdated">Mise à jour de l\'App</string>

@@ -35,13 +35,14 @@
     <string name="whiteNoise">Witte ruis</string>
 
     <string name="preparing">Bezig met voorbereiden&#8230;...</string>
-    <string name="enableLowPassFilter">Lage geluiden-filter inschakelen</string>
-    <string name="filterCutoff">Filteren op: <xliff:g id="frequency">%d</xliff:g> Hz</string>
+    <string name="enableLowPassFilter">Lage geluiden-filter</string>
+    <string name="filterCutoff">Filteren op</string>
+    <string name="filterCutoffValue"><xliff:g id="frequency">%d</xliff:g> Hz</string>
     <string name="playbackNotSupported">Het afspelen is niet mogelijk. Bekijk de logbestanden voor meer informatie.</string>
     <string name="playbackFailure">Het bestand kan niet worden afgespeeld. Bekijk de logbestanden voor meer informatie.</string>
     <string name="sleepTimerUpdated">De slaaptimer is bijgewerkt</string>
 
-    <string name="theme">Donker thema gebruiken</string>
+    <string name="theme">Thema</string>
 
     <string name="notificationPlaying">Bezig met afspelen&#8230;...</string>
 

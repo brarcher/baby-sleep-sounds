@@ -7,9 +7,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,12 +18,8 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.TextView;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -38,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import android.content.SharedPreferences;
 
 import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler;
 import nl.bravobit.ffmpeg.FFmpeg;
@@ -59,19 +53,12 @@ public class MainActivity extends AppCompatActivity
     private Timer _timer;
 
     private FFmpeg _ffmpeg;
-    private CheckBox _enableFilterSetting;
-    private SeekBar _filterCutoffFrequencySetting;
     private ProgressDialog _encodingProgress;
-
-    private CheckBox _useDarkTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        final SharedPreferences pref = getApplicationContext().getSharedPreferences(TAG, MODE_PRIVATE);
-        if (pref.getBoolean("useDarkTheme",false)) {
-            setTheme(R.style.AppThemeDark_NoActionBar );
-        }
+        Preferences.get(this).applyTheme();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -181,81 +168,6 @@ public class MainActivity extends AppCompatActivity
             reportPlaybackUnsupported();
         }
 
-        final View filterFrequencyReadout = findViewById(R.id.filterFrequencyReadout);
-        final View filterFrequencyLayout = findViewById(R.id.filterFrequencyLayout);
-        _enableFilterSetting = findViewById(R.id.enableFilter);
-        _enableFilterSetting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                filterFrequencyLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-                filterFrequencyReadout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-            }
-        });
-
-        _filterCutoffFrequencySetting = findViewById(R.id.filterFrequencyBar);
-        _filterCutoffFrequencySetting.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-        {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-            {
-                updateFrequencyReadout(getFrequencyReadout());
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar)
-            {
-                // Nothing to do
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar)
-            {
-                // Nothing to do
-            }
-        });
-
-        // Set initial value
-        updateFrequencyReadout(getFrequencyReadout());
-
-        _useDarkTheme = findViewById(R.id.useDarkTheme);
-        _useDarkTheme.setChecked(pref.getBoolean("useDarkTheme",false));
-        _useDarkTheme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putBoolean("useDarkTheme", isChecked);
-                editor.commit();
-                recreate(); //Apply theme change immediately
-            }
-        });
-    }
-
-    /**
-     * Retrieve the value of the frequency readout, accounting for any
-     * offset or adjustments
-     */
-    private int getFrequencyReadout()
-    {
-        int rawValue = _filterCutoffFrequencySetting.getProgress();
-        // The data represented by the frequency bar starts at 200, so we need to add
-        // this offset to the value, as the bar's value always starts at 0.
-        int actualValue = 200 + rawValue;
-        return actualValue;
-    }
-
-    /**
-     * Update the TextView containing the frequency to the given value
-     * @param frequency value to update the field with
-     */
-    private void updateFrequencyReadout(int frequency)
-    {
-        final TextView filterFrequency = findViewById(R.id.filterFrequencyText);
-        String readout = String.format(getString(R.string.filterCutoff), frequency);
-        filterFrequency.setText(readout);
     }
 
     /**
@@ -296,9 +208,9 @@ public class MainActivity extends AppCompatActivity
             LinkedList<String> arguments = new LinkedList<>();
             arguments.add("-i");
             arguments.add(originalFile.getAbsolutePath());
-            if(_enableFilterSetting.isChecked())
+            if(Preferences.get(this).isLowPassFilterEnabled())
             {
-                int frequencyValue = getFrequencyReadout();
+                int frequencyValue = Preferences.get(this).getLowPassFilterFrequency();
 
                 Log.i(TAG, "Will perform lowpass filter to " + frequencyValue + " Hz");
                 arguments.add("-af");
@@ -499,7 +411,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setControlsEnabled(boolean enabled)
     {
-        for(int resId : new int[]{R.id.soundSpinner, R.id.enableFilter, R.id.filterFrequencyBar, R.id.useDarkTheme})
+        for(int resId : new int[]{R.id.soundSpinner})
         {
             final View view = findViewById(resId);
             view.setEnabled(enabled);
@@ -539,7 +451,12 @@ public class MainActivity extends AppCompatActivity
     {
         int id = item.getItemId();
 
-        if(id == R.id.action_about)
+        if(id == R.id.action_settings)
+        {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        else if (id == R.id.action_about)
         {
             displayAboutDialog();
             return true;

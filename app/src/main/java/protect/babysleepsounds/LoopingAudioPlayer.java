@@ -29,7 +29,7 @@ public class LoopingAudioPlayer
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         if(powerManager != null)
         {
-            _wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+            _wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "protect.babysleepsounds:LoopingAudioPlayerWakeLock");
         }
         else
         {
