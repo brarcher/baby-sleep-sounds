@@ -31,10 +31,6 @@ Windows:
 ./gradlew.bat build
 ```
 
-# Translating
-
-If you are interested in translating this application to another language, find the project listing on [Transifex](https://www.transifex.com/na-243/baby-sleep-sounds).
-
 ## Thanks
 
 App icon '[Music](https://thenounproject.com/term/music/886761/)' by Aleks from the Noun Project.
