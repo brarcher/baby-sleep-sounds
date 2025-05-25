@@ -1,15 +1,15 @@
 // https://docs.gradle.org/current/userguide/upgrading_version_5.html#the_findbugs_plugin_has_been_removedhttps://docs.gradle.org/current/userguide/upgrading_version_5.html#the_findbugs_plugin_has_been_removed
 plugins {
-    id "com.github.spotbugs" version "4.5.1"
     id "com.android.application"
 }
 
 android {
-    compileSdkVersion 29
+    namespace "protect.babysleepsounds"
+    compileSdkVersion 33
     defaultConfig {
         applicationId "protect.babysleepsounds"
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdkVersion 24
+        targetSdkVersion 33
         versionCode 15
         versionName "0.11"
     }
@@ -23,9 +23,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    lintOptions {
-        disable "GoogleAppIndexingWarning"
-        disable "MissingTranslation"
+    lint {
+        disable 'GoogleAppIndexingWarning', 'MissingTranslation'
     }
 }
 
@@ -39,23 +38,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.google.guava:guava:18.0'
-    implementation 'protect:android-ffmpeg:release@aar'
+    implementation group: 'io.github.maitrungduc1410', name: 'ffmpeg-kit-min', version: '6.0.0'
 }
 
-spotbugs {
-    effort = 'max'
-    reportLevel = 'high'
-    ignoreFailures = false
-
-    excludeFilter = file("./config/findbugs/exclude.xml")
-}
-
-project.tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
-    group 'Verification'
-    description 'Run Spotbugs on this project.'
-
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
-}

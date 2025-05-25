@@ -21,6 +21,13 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.arthenica.ffmpegkit.FFmpegSession;
+import com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback;
+import com.arthenica.ffmpegkit.LogCallback;
+import com.arthenica.ffmpegkit.ReturnCode;
+import com.arthenica.ffmpegkit.SessionState;
+import com.arthenica.ffmpegkit.Statistics;
+import com.arthenica.ffmpegkit.StatisticsCallback;
 import com.google.common.collect.ImmutableMap;
 
 import java.io.File;
@@ -35,9 +42,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler;
-import nl.bravobit.ffmpeg.FFmpeg;
-import nl.bravobit.ffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
+import com.arthenica.ffmpegkit.FFmpegKit;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -52,7 +57,6 @@ public class MainActivity extends AppCompatActivity
     private boolean _playing = false;
     private Timer _timer;
 
-    private FFmpeg _ffmpeg;
     private ProgressDialog _encodingProgress;
 
     @Override
@@ -139,6 +143,7 @@ public class MainActivity extends AppCompatActivity
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         final Button button = findViewById(R.id.button);
+        button.setEnabled(true);
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -154,19 +159,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
-        _ffmpeg = FFmpeg.getInstance(this);
-
-
-        if(_ffmpeg.isSupported())
-        {
-            button.setEnabled(true);
-        }
-        else
-        {
-            Log.d(TAG, "ffmpeg not supported");
-            reportPlaybackUnsupported();
-        }
 
     }
 
@@ -228,42 +220,29 @@ public class MainActivity extends AppCompatActivity
 
             Log.i(TAG, "Launching ffmpeg");
             String[] cmd = arguments.toArray(new String[arguments.size()]);
-            _ffmpeg.execute(cmd, new ExecuteBinaryResponseHandler()
-            {
-                public void onStart()
-                {
-                    Log.d(TAG, "ffmpeg execute onStart()");
-                }
 
-                public void onSuccess(String message)
-                {
-                    Log.d(TAG, "ffmpeg execute onSuccess(): " + message);
+            FFmpegKit.executeAsync(String.join(" ", cmd), session -> {
+                SessionState state = session.getState();
+                ReturnCode returnCode = session.getReturnCode();
+                Log.d(TAG, String.format("FFmpeg process exited with state %s and rc %s.%s", state, returnCode, session.getFailStackTrace()));
 
+                if(returnCode.isValueSuccess()) {
                     Intent startIntent = new Intent(MainActivity.this, AudioService.class);
                     startIntent.putExtra(AudioService.AUDIO_FILENAME_ARG, processed.getAbsolutePath());
                     startService(startIntent);
 
                     updateToPlaying();
                 }
-
-                public void onProgress(String message)
-                {
-                    Log.d(TAG, "ffmpeg execute onProgress(): " + message);
-                }
-
-                public void onFailure(String message)
-                {
-                    Log.d(TAG, "ffmpeg execute onFailure(): " + message);
+                if(returnCode.isValueError()) {
                     reportPlaybackFailure();
                 }
-
-                public void onFinish()
-                {
-                    Log.d(TAG, "ffmpeg execute onFinish()");
-                }
+            }, log -> {
+                Log.d(TAG, log.getMessage());
+            }, statistics -> {
+                Log.d(TAG, "ffmpeg statistics: " + statistics.toString());
             });
         }
-        catch(IOException|FFmpegCommandAlreadyRunningException e)
+        catch(Exception e)
         {
             Log.i(TAG, "Failed to start playback", e);
             reportPlaybackFailure();
@@ -470,7 +449,8 @@ public class MainActivity extends AppCompatActivity
         final Map<String, String> USED_LIBRARIES = ImmutableMap.of
         (
             "FFmpeg", "https://ffmpeg.org/",
-            "FFmpeg-Android", "https://github.com/writingminds/ffmpeg-android"
+            "FFmpeg Kit", "https://github.com/arthenica/ffmpeg-kit",
+            "ffmpeg-kit-min", "https://central.sonatype.com/artifact/io.github.maitrungduc1410/ffmpeg-kit-min"
         );
 
         final Map<String, String> SOUND_RESOURCES = ImmutableMap.of

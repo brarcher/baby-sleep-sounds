@@ -88,7 +88,7 @@ public class AudioService extends Service
         Intent resultIntent = new Intent(this, MainActivity.class);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
-                resultIntent, 0);
+                resultIntent, PendingIntent.FLAG_MUTABLE);
         builder.setContentIntent(resultPendingIntent);
 
         startForeground(NOTIFICATION_ID, builder.build());
